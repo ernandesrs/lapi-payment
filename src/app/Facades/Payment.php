@@ -14,10 +14,24 @@ class Payment extends Facade
      * @param string $number
      * @param string $cvv
      * @param string $expiration
-     * @return \stdClass
+     * @return null|\ArrayObject
      */
     public static function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {
         return (new PaymentService())->createCard($holderName, $number, $cvv, $expiration);
+    }
+
+    /**
+     * Charge with credit card
+     *
+     * @param string $cardHash
+     * @param float $amount
+     * @param integer $installments
+     * @param array $metadata
+     * @return null|\ArrayObject
+     */
+    public static function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
+    {
+        return (new PaymentService())->chargeWithCard($cardHash, $amount, $installments, $metadata);
     }
 }

@@ -71,3 +71,25 @@ $card = \ErnandesRS\LapiPayment\App\Facades\Payment::createCard('The Holder Name
 print_r($card);
 
 ```
+
+### Fazendo uma cobrança no cartão de crédito
+```php
+
+// validar o cartão
+$card = \ErnandesRS\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
+
+$cardHash = $card->gateway_card_id;
+$amount = 101.98;
+$installments = 1;
+$extras = [
+    'example' => 'example extra data',
+    'meta' => 'data',
+    'others' => 'information',
+    'more' => 'fields'
+];
+
+// cobrança com cartão validado
+$chargeWithCard = \ErnandesRS\LapiPayment\App\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
+print_r($chargeWithCard);
+
+```

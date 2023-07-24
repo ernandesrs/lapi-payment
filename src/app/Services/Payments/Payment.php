@@ -37,11 +37,25 @@ class Payment
      * @param string $number
      * @param string $cvv
      * @param string $expiration
-     * @return mixed
+     * @return null|\ArrayObject
      */
     public function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {
         return (new $this->gateway)->createCard($holderName, $number, $cvv, $expiration);
+    }
+
+    /**
+     * Charge with credit card
+     *
+     * @param string $cardHash
+     * @param float $amount
+     * @param integer $installments
+     * @param array $metadata
+     * @return null|\ArrayObject
+     */
+    public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
+    {
+        return (new $this->gateway)->chargeWithCard($cardHash, $amount, $installments, $metadata);
     }
 
     /**

@@ -26,7 +26,7 @@ class Pagarme
      * @param string $number
      * @param string $cvv
      * @param string $expiration
-     * @return null|\stdClass
+     * @return null|\ArrayObject
      */
     public function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {
@@ -42,7 +42,7 @@ class Pagarme
         }
 
         return (object) [
-            'gateway_card_hash' => $card->id,
+            'gateway_card_id' => $card->id,
             'valid' => $card->valid,
             'brand' => $card->brand,
             'holder_name' => $card->holder_name,
@@ -51,13 +51,33 @@ class Pagarme
             'expiration_date' => $card->expiration_date,
             'date_created' => $card->date_created,
             'date_updated' => $card->date_updated,
-            'country' => $card->country
+            'country' => $card->country,
+            'gateway_response' => $card
         ];
     }
 
-    public function chargeWithCard()
+    /**
+     * Charge with credit card
+     *
+     * @param string $cardHash
+     * @param float $amount
+     * @param integer $installments
+     * @param array $metadata
+     * @return null|\ArrayObject
+     */
+    public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
     {
-        // 
+        $transaction = $this->charge($cardHash, $amount, $installments, 'credit_card', $metadata);
+
+        if (!$transaction?->id) {
+            return null;
+        }
+
+        return (object) [
+            'gateway_transaction_id' => $transaction->id,
+            'gateway_status' => $transaction->status,
+            'gateway_response' => $transaction
+        ];
     }
 
     public function chargeWithBankSlip()
@@ -65,9 +85,25 @@ class Pagarme
         // 
     }
 
-    public function charge()
+    /**
+     * Charge
+     *
+     * @param string $cardHash
+     * @param float $amount
+     * @param integer $installments
+     * @param string $method
+     * @param array $metadata
+     * @return \ArrayObject
+     */
+    public function charge(string $cardHash, float $amount, int $installments, string $method, array $metadata = [])
     {
-        // 
+        return $this->pagarme->transactions()->create([
+            'card_id' => $cardHash,
+            'installments' => $installments,
+            'amount' => $amount * 100,
+            'payment_method' => $method,
+            'metadata' => $metadata
+        ]);
     }
 
     /**
