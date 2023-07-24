@@ -1,9 +1,9 @@
 <?php
 
-namespace ErnandesRS\LapiPayment\App\Facades;
+namespace Ernandesrs\LapiPayment\App\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use ErnandesRS\LapiPayment\App\Services\Payments\Payment as PaymentService;
+use Ernandesrs\LapiPayment\App\Services\Payments\Payment as PaymentService;
 
 class Payment extends Facade
 {

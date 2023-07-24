@@ -42,7 +42,7 @@ return [
         // outros providers...
         App\Providers\RouteServiceProvider::class,
 
-        ErnandesRS\LapiPayment\LapiPaymentServiceProvider::class
+        Ernandesrs\LapiPayment\LapiPaymentServiceProvider::class
     ],
 
     // outras configurações
@@ -60,14 +60,14 @@ O arquivo de configuração possui campos que podem ser modificados no arquivo d
 Para fazer uso é simples, basta usar o facade:
 ```php
 
-\ErnandesRS\LapiPayment\App\Facades\Payment
+\Ernandesrs\LapiPayment\App\Facades\Payment
 
 ```
 
 ### Criando/validando um cartão
 ```php
 
-$card = \ErnandesRS\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
+$card = \Ernandesrs\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
 print_r($card);
 
 ```
@@ -76,7 +76,7 @@ print_r($card);
 ```php
 
 // validar o cartão
-$card = \ErnandesRS\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
+$card = \Ernandesrs\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
 
 $cardHash = $card->gateway_card_id;
 $amount = 101.98;
@@ -89,7 +89,7 @@ $extras = [
 ];
 
 // cobrança com cartão validado
-$chargeWithCard = \ErnandesRS\LapiPayment\App\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
+$chargeWithCard = \Ernandesrs\LapiPayment\App\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
 print_r($chargeWithCard);
 
 ```

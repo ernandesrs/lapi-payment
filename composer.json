@@ -8,12 +8,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "ErnandesRS\\LapiPayment\\": "src/"
+            "Ernandesrs\\LapiPayment\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ErnandesRS\\Test\\": "test/"
+            "Ernandesrs\\Test\\": "test/"
         }
     },
     "authors": [

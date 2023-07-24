@@ -1,6 +1,6 @@
 <?php
 
-namespace ErnandesRS\LapiPayment;
+namespace Ernandesrs\LapiPayment;
 
 use Illuminate\Support\ServiceProvider;
 
