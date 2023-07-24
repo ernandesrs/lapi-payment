@@ -23,7 +23,9 @@ PAYMENT_GATEWAY_PAGARME_API_LIVE=YOUR API KEY LIVE
 <b>PAYMENT_TESTING</b> define se o sistema de cobrança está em testes. Se definido como <b><i>false</i></b>, o sistema de cobrança irá efetuar cobranças reais.
 
 <b>PAYMENT_DEFAULT_GATEWAY</b> define a gateway que será utilizada. Veja o início da documentação as gateways implementadas.
+
 <b>PAYMENT_GATEWAY_PAGARME_API_TEST</b> chave de teste da api(cobranças falsas para testes).
+
 <b>PAYMENT_GATEWAY_PAGARME_API_LIVE</b> chave de produção da api(cobranças reais).
 
 ### Adicione o sevice provider
@@ -53,3 +55,19 @@ Na raiz do projeto Laravel, publique o arquivo de configuração com o seguinte 
 > php artisan vendor:publish --tag=lapi-payment-config
 
 O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>.
+
+# Uso
+Para fazer uso é simples, basta usar o facade:
+```php
+
+\ErnandesRS\LapiPayment\App\Facades\Payment
+
+```
+
+### Criando/validando um cartão
+```php
+
+$card = \ErnandesRS\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
+print_r($card);
+
+```
