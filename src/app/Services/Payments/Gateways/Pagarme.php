@@ -16,7 +16,7 @@ class Pagarme
      */
     public function __construct()
     {
-        $this->pagarme = new \PagarMe\Client(env('GATEWAY_PAGARME_API_TEST'));
+        $this->pagarme = new \PagarMe\Client($this->apiKey());
     }
 
     /**
@@ -68,5 +68,17 @@ class Pagarme
     public function charge()
     {
         // 
+    }
+
+    /**
+     * Get api key
+     *
+     * @return string
+     */
+    private function apiKey()
+    {
+        return config('lapi-payment.testing') === true ?
+            config('lapi-payment.pagarme.test_api_key') :
+            config('lapi-payment.pagarme.live_api_key');
     }
 }
