@@ -1,6 +1,6 @@
 <?php
 
-namespace Ernandesrs\LapiPayment\App\Services\Payments\Gateways;
+namespace Ernandesrs\LapiPayment\Services\Payments\Gateways;
 
 class Pagarme
 {

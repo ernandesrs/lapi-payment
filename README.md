@@ -60,14 +60,14 @@ O arquivo de configuração possui campos que podem ser modificados no arquivo d
 Para fazer uso é simples, basta usar o facade:
 ```php
 
-\Ernandesrs\LapiPayment\App\Facades\Payment
+\Ernandesrs\LapiPayment\Facades\Payment
 
 ```
 
 ### Criando/validando um cartão
 ```php
 
-$card = \Ernandesrs\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
+$card = \Ernandesrs\LapiPayment\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
 print_r($card);
 
 ```
@@ -76,7 +76,7 @@ print_r($card);
 ```php
 
 // validar o cartão
-$card = \Ernandesrs\LapiPayment\App\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
+$card = \Ernandesrs\LapiPayment\Facades\Payment::createCard('The Holder Name', '4916626701217934', '156', '0424');
 
 $cardHash = $card->gateway_card_id;
 $amount = 101.98;
@@ -89,7 +89,7 @@ $extras = [
 ];
 
 // cobrança com cartão validado
-$chargeWithCard = \Ernandesrs\LapiPayment\App\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
+$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
 print_r($chargeWithCard);
 
 ```

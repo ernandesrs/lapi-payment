@@ -1,6 +1,6 @@
 <?php
 
-namespace Ernandesrs\LapiPayment\App\Services\Payments;
+namespace Ernandesrs\LapiPayment\Services\Payments;
 
 class Payment
 {
@@ -10,7 +10,7 @@ class Payment
      * @var array
      */
     private $gateways = [
-        'pagarme' => \Ernandesrs\LapiPayment\App\Services\Payments\Gateways\Pagarme::class
+        'pagarme' => \Ernandesrs\LapiPayment\Services\Payments\Gateways\Pagarme::class
     ];
 
     /**
