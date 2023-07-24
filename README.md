@@ -5,10 +5,10 @@ Sistema de pagamentos para o LAPI(https://github.com/ernandesrs/pproj_lapi).
 # GATEWAYS IMPLEMENTADOS
 Pagarme: pagarme
 
-# Instalação
+# INSTALAÇÃO
 > composer require ernandesrs/lapi-payment
 
-# Configuração
+# CONFIGURAÇÃO
 Guia de configuração do pacote LAPI PAYMENT.
 
 ### Variáveis ambientes
@@ -22,7 +22,7 @@ PAYMENT_GATEWAY_PAGARME_API_LIVE=YOUR API KEY LIVE
 
 <b>PAYMENT_TESTING</b> define se o sistema de cobrança está em testes. Se definido como <b><i>false</i></b>, o sistema de cobrança irá efetuar cobranças reais.
 
-<b>PAYMENT_DEFAULT_GATEWAY</b> define a gateway que será utilizada. Veja o início da documentação as gateways implementadas.
+<b>PAYMENT_DEFAULT_GATEWAY</b> define a gateway que será utilizada. Veja o [início da documentação as gateways implementadas](#gateways-implementados).
 
 <b>PAYMENT_GATEWAY_PAGARME_API_TEST</b> chave de teste da api(cobranças falsas para testes).
 
@@ -56,7 +56,7 @@ Na raiz do projeto Laravel, publique o arquivo de configuração com o seguinte 
 
 O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>.
 
-# Uso
+# USO
 Para fazer uso é simples, basta usar o facade:
 ```php
 
