@@ -14,7 +14,7 @@ class Payment extends Facade
      * @param string $number
      * @param string $cvv
      * @param string $expiration
-     * @return null|\ArrayObject
+     * @return null|\Ernandesrs\LapiPayment\Models\Card
      */
     public static function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {

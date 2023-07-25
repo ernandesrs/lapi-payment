@@ -2,6 +2,8 @@
 
 namespace Ernandesrs\LapiPayment\Services\Payments\Gateways;
 
+use Ernandesrs\LapiPayment\Models\Card;
+
 class Pagarme
 {
     /**
@@ -26,7 +28,7 @@ class Pagarme
      * @param string $number
      * @param string $cvv
      * @param string $expiration
-     * @return null|\ArrayObject
+     * @return null|\Ernandesrs\LapiPayment\Models\Card
      */
     public function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {
@@ -37,23 +39,16 @@ class Pagarme
             'card_expiration_date' => $expiration
         ]);
 
-        if (!$card->valid) {
-            return null;
-        }
-
-        return (object) [
-            'gateway_card_id' => $card->id,
-            'valid' => $card->valid,
-            'brand' => $card->brand,
-            'holder_name' => $card->holder_name,
-            'last_digits' => $card->last_digits,
-            'first_digits' => $card->first_digits,
-            'expiration_date' => $card->expiration_date,
-            'date_created' => $card->date_created,
-            'date_updated' => $card->date_updated,
-            'country' => $card->country,
-            'gateway_response' => $card
-        ];
+        return !$card->valid ?
+            null :
+            new Card(
+                $card->id,
+                $card->holder_name,
+                $card->last_digits,
+                $card->expiration_date,
+                $card->country,
+                'pagarme'
+            );
     }
 
     /**
