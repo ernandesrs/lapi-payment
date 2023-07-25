@@ -2,7 +2,9 @@
 
 namespace Ernandesrs\LapiPayment\Models;
 
-class Payment
+use Illuminate\Database\Eloquent\Model;
+
+class Payment extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -27,14 +29,22 @@ class Payment
      * @param string $amount
      * @param string $installments
      * @param string $status
+     * @return Payment
      */
-    public function __construct(
-        public string $transaction_id,
-        public string $gateway,
-        public string $method,
-        public string $amount,
-        public string $installments,
-        public string $status
+    public function construct(
+        string $transaction_id,
+        string $gateway,
+        string $method,
+        string $amount,
+        string $installments,
+        string $status
     ) {
+        $this->transaction_id = $transaction_id;
+        $this->gateway = $gateway;
+        $this->method = $method;
+        $this->amount = $amount;
+        $this->installments = $installments;
+        $this->status = $status;
+        return $this;
     }
 }

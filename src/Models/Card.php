@@ -2,7 +2,9 @@
 
 namespace Ernandesrs\LapiPayment\Models;
 
-class Card
+use Illuminate\Database\Eloquent\Model;
+
+class Card extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -27,14 +29,22 @@ class Card
      * @param string $expiration_date
      * @param string $country
      * @param string $gateway
+     * @return Card
      */
-    public function __construct(
-        public string $hash,
-        public string $holder_name,
-        public string $last_digits,
-        public string $expiration_date,
-        public string $country,
-        public string $gateway
+    public function construct(
+        string $hash,
+        string $holder_name,
+        string $last_digits,
+        string $expiration_date,
+        string $country,
+        string $gateway
     ) {
+        $this->hash = $hash;
+        $this->holder_name = $holder_name;
+        $this->last_digits = $last_digits;
+        $this->expiration_date = $expiration_date;
+        $this->country = $country;
+        $this->gateway = $gateway;
+        return $this;
     }
 }

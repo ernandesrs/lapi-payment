@@ -40,9 +40,9 @@ class Pagarme
             'card_expiration_date' => $expiration
         ]);
 
-        return !$card->valid ?
+        return !$card?->valid ?
             null :
-            new CardModel(
+            (new CardModel())->construct(
                 $card->id,
                 $card->holder_name,
                 $card->last_digits,
@@ -93,7 +93,7 @@ class Pagarme
 
         return !$transaction?->id ?
             null :
-            new PaymentModel(
+            (new PaymentModel())->construct(
                 $transaction->id,
                 'pagarme',
                 $transaction->payment_method,
