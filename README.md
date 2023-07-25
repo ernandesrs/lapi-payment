@@ -123,7 +123,7 @@ Agora é preciso implementar alguns métodos obrigatórios no modelo User:
 Em sua maioria, os métodos não precisam de explicação e são bem intuitivos, mas algumas são necessários, veja:
 
 #### customerPhoneNumbers()
-O método abaixo deverá retornar um array simples contendo ao menos um número de telefone do cliente.
+O método deverá retornar um array simples contendo ao menos um número de telefone do cliente.
 ```php
 
 abstract public function customerPhoneNumbers(): array;
@@ -131,7 +131,7 @@ abstract public function customerPhoneNumbers(): array;
 ```
 
 #### customerDocuments()
-O método abaixo deverá retornar um array de arrays os dados dos documentos do cliente, seguindo exemplo no comentário do código abaixo.
+O método deverá retornar um array de arrays os dados dos documentos do cliente, seguindo exemplo no comentário do código abaixo.
 ```php
 
 /**
@@ -154,7 +154,7 @@ abstract public function customerDocuments(): array;
 ```
 
 #### customerType()
-Este é um método opcional que define o tipo de cliente(individual/corporation). Por padrão é 'individual'.
+É um método opcional que define o tipo de cliente(individual/corporation). Por padrão é 'individual'.
 
 # USO
 Para fazer uso é simples, basta usar o facade:
@@ -208,7 +208,7 @@ $amount = 101.98;
 $installments = 1;
 
 // adiconando um cliente e efetuando cobrança
-$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::addCustomer(Client)->chargeWithCard($card->hash, $amount, $installments);
+$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::addCustomer($client)->chargeWithCard($card->hash, $amount, $installments);
 print_r($chargeWithCard);
 
 ```
