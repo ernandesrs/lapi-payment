@@ -2,9 +2,9 @@
 
 namespace Ernandesrs\LapiPayment\Services\Payments;
 
-class Payment
+class LapiPay
 {
-    use TraitPayment;
+    use TraitLapiPay;
 
     /**
      * Gateways

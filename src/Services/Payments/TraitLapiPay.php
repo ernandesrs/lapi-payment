@@ -2,13 +2,13 @@
 
 namespace Ernandesrs\LapiPayment\Services\Payments;
 
-trait TraitPayment
+trait TraitLapiPay
 {
     /**
      * Add customer
      *
      * @param \App\Models\User $user
-     * @return Payment
+     * @return LapiPay
      */
     public function addCustomer(\App\Models\User $user)
     {
@@ -20,7 +20,7 @@ trait TraitPayment
      * Gateway
      *
      * @param string $gateway
-     * @return Payment
+     * @return LapiPay
      */
     public function gateway(string $gateway)
     {

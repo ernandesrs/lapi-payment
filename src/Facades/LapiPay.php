@@ -3,9 +3,9 @@
 namespace Ernandesrs\LapiPayment\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Ernandesrs\LapiPayment\Services\Payments\Payment as PaymentService;
+use Ernandesrs\LapiPayment\Services\Payments\LapiPay as LapiPayService;
 
-class Payment extends Facade
+class LapiPay extends Facade
 {
     /**
      * Validate a card
@@ -18,7 +18,7 @@ class Payment extends Facade
      */
     public static function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {
-        return (new PaymentService())->createCard($holderName, $number, $cvv, $expiration);
+        return (new LapiPayService())->createCard($holderName, $number, $cvv, $expiration);
     }
 
     /**
@@ -32,17 +32,17 @@ class Payment extends Facade
      */
     public static function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
     {
-        return (new PaymentService())->chargeWithCard($cardHash, $amount, $installments, $metadata);
+        return (new LapiPayService())->chargeWithCard($cardHash, $amount, $installments, $metadata);
     }
 
     /**
      * Add a customer
      *
      * @param \App\Models\User $user
-     * @return \Ernandesrs\LapiPayment\Services\Payments\Payment
+     * @return \Ernandesrs\LapiPayment\Services\Payments\LapiPay
      */
     public static function addCustomer(\App\Models\User $user)
     {
-        return (new PaymentService())->addCustomer($user);
+        return (new LapiPayService())->addCustomer($user);
     }
 }
