@@ -51,7 +51,7 @@ class Payment
      * @param float $amount
      * @param integer $installments
      * @param array $metadata
-     * @return null|\ArrayObject
+     * @return null|\Ernandesrs\LapiPayment\Models\Payment
      */
     public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
     {

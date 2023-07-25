@@ -2,7 +2,8 @@
 
 namespace Ernandesrs\LapiPayment\Services\Payments\Gateways;
 
-use Ernandesrs\LapiPayment\Models\Card;
+use Ernandesrs\LapiPayment\Models\Card as CardModel;
+use Ernandesrs\LapiPayment\Models\Payment as PaymentModel;
 
 class Pagarme
 {
@@ -41,7 +42,7 @@ class Pagarme
 
         return !$card->valid ?
             null :
-            new Card(
+            new CardModel(
                 $card->id,
                 $card->holder_name,
                 $card->last_digits,
@@ -58,21 +59,22 @@ class Pagarme
      * @param float $amount
      * @param integer $installments
      * @param array $metadata
-     * @return null|\ArrayObject
+     * @return null|\Ernandesrs\LapiPayment\Models\Payment
      */
     public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
     {
         $transaction = $this->charge($cardHash, $amount, $installments, 'credit_card', $metadata);
 
-        if (!$transaction?->id) {
-            return null;
-        }
-
-        return (object) [
-            'gateway_transaction_id' => $transaction->id,
-            'gateway_status' => $transaction->status,
-            'gateway_response' => $transaction
-        ];
+        return !$transaction?->id ?
+            null :
+            new PaymentModel(
+                $transaction->id,
+                'pagarme',
+                'credit_card',
+                $transaction->amount,
+                $transaction->installments,
+                $transaction->status
+            );
     }
 
     public function chargeWithBankSlip()
