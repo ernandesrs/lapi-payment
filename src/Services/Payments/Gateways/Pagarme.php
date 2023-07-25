@@ -15,6 +15,13 @@ class Pagarme
     private $pagarme;
 
     /**
+     * Customer
+     *
+     * @var array
+     */
+    private $customer;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -83,13 +90,19 @@ class Pagarme
      */
     public function charge(string $cardHash, float $amount, int $installments, string $method, array $metadata = [])
     {
-        $transaction = $this->pagarme->transactions()->create([
+        $data = [
             'card_id' => $cardHash,
             'installments' => $installments,
             'amount' => $amount * 100,
             'payment_method' => $method,
             'metadata' => $metadata
-        ]);
+        ];
+
+        if ($this->customer?->external_id) {
+            $data['customer'] = $this->customer;
+        }
+
+        $transaction = $this->pagarme->transactions()->create($data);
 
         return !$transaction?->id ?
             null :
@@ -113,5 +126,25 @@ class Pagarme
         return config('lapi-payment.testing') === true ?
             config('lapi-payment.pagarme.test_api_key') :
             config('lapi-payment.pagarme.live_api_key');
+    }
+
+    /**
+     * Add a customer
+     *
+     * @param \App\Models\User $user
+     * @return Pagarme
+     */
+    public function addCustomer(\App\Models\User $user)
+    {
+        $this->customer = (object) [
+            'external_id' => $user->customerId(),
+            'name' => $user->customerName(),
+            'email' => $user->customerEmail(),
+            'country' => $user->customerCountry(),
+            'type' => $user->customerType(),
+            'documents' => $user->customerDocuments(),
+            'phone_numbers' => $user->customerPhoneNumbers()
+        ];
+        return $this;
     }
 }

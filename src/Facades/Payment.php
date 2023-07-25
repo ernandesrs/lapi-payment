@@ -34,4 +34,15 @@ class Payment extends Facade
     {
         return (new PaymentService())->chargeWithCard($cardHash, $amount, $installments, $metadata);
     }
+
+    /**
+     * Add a customer
+     *
+     * @param \App\Models\User $user
+     * @return \Ernandesrs\LapiPayment\Services\Payments\Payment
+     */
+    public static function addCustomer(\App\Models\User $user)
+    {
+        return (new PaymentService())->addCustomer($user);
+    }
 }

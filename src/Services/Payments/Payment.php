@@ -4,6 +4,8 @@ namespace Ernandesrs\LapiPayment\Services\Payments;
 
 class Payment
 {
+    use TraitPayment;
+
     /**
      * Gateways
      *
@@ -14,11 +16,11 @@ class Payment
     ];
 
     /**
-     * Gateway
+     * Gateway instance
      *
-     * @var string
+     * @var \Ernandesrs\LapiPayment\Services\Payments\Gateways\Pagarme
      */
-    private $gateway;
+    private $gatewayInstance;
 
     /**
      * Constructor
@@ -41,7 +43,7 @@ class Payment
      */
     public function createCard(string $holderName, string $number, string $cvv, string $expiration)
     {
-        return (new $this->gateway)->createCard($holderName, $number, $cvv, $expiration);
+        return $this->gatewayInstance->createCard($holderName, $number, $cvv, $expiration);
     }
 
     /**
@@ -55,23 +57,6 @@ class Payment
      */
     public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
     {
-        return (new $this->gateway)->chargeWithCard($cardHash, $amount, $installments, $metadata);
-    }
-
-    /**
-     * Gateway
-     *
-     * @param string $gateway
-     * @return Payment
-     */
-    public function gateway(string $gateway)
-    {
-        try {
-            $this->gateway = $this->gateways[$gateway];
-        } catch (\Exception $e) {
-            throw new \Exception('"' . $gateway . '" is a invalid gateway');
-        }
-
-        return $this;
+        return $this->gatewayInstance->chargeWithCard($cardHash, $amount, $installments, $metadata);
     }
 }

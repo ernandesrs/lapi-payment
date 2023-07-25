@@ -11,9 +11,13 @@ class Test
         // var_dump($card);
 
         // cobrança com cartão
-        $chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($card->hash, 101.98, 1, [
-            'pack' => 'test'
-        ]);
+        // $chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($card->hash, 101.98, 1, [
+        //     'pack' => 'test'
+        // ]);
+        // var_dump($chargeWithCard);
+
+        // cobrança com cartão adicionando dados do cliente
+        $chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::addCustomer(\Auth::user())->chargeWithCard($card->hash, 101.98, 1, ['pack' => 'test']);
         var_dump($chargeWithCard);
     }
 }
