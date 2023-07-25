@@ -56,6 +56,106 @@ Na raiz do projeto Laravel, publique o arquivo de configuração com o seguinte 
 
 O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>.
 
+### Faça uso da trait AsCustomer
+Na seu modelo de usuário <b><i>\App\Models\User</i></b>, faça uso da trait <b>AsCustomer</b>, seu modelo ficará parecido com isso:
+```php
+
+<?php
+
+namespace App\Models;
+
+// outras importações...
+use Ernandesrs\LapiPayment\Models\AsCustomer;
+
+class User extends Authenticatable
+{
+    use AsCustomer;
+
+```
+
+Agora é preciso implementar alguns métodos obrigatórios no modelo User:
+```php
+
+    /**
+     * Customer id
+     *
+     * @return string
+     */
+    abstract public function customerId(): string;
+
+    /**
+     * Customer full name
+     *
+     * @return string
+     */
+    abstract public function customerName(): string;
+
+    /**
+     * Customer email
+     *
+     * @return string
+     */
+    abstract public function customerEmail(): string;
+
+    /**
+     * Customer country
+     *
+     * @return string
+     */
+    abstract public function customerCountry(): string;
+
+    /**
+     * Customer phone numbers
+     *
+     * @return array
+     */
+    abstract public function customerPhoneNumbers(): array;
+
+    /**
+     * Customer documents
+     *
+     * @return array
+     */
+    abstract public function customerDocuments(): array;
+
+```
+
+Em sua maioria, os métodos não precisam de explicação e são bem intuitivos, mas algumas são necessários, veja:
+
+#### customerPhoneNumbers()
+O método abaixo deverá retornar um array simples contendo ao menos um número de telefone do cliente.
+```php
+
+abstract public function customerPhoneNumbers(): array;
+
+```
+
+#### customerDocuments()
+O método abaixo deverá retornar um array de arrays os dados dos documentos do cliente, seguindo exemplo no comentário do código abaixo.
+```php
+
+/**
+ * 
+ * Example:
+ * [
+ *      [
+ *          'type' => 'cpf',
+ *          'number' => '00000000011'
+ *      ],
+ *      [
+ *          'type' => 'rg',
+ *          'number' => '12345679'
+ *      ]
+ * ]
+ * 
+ */
+abstract public function customerDocuments(): array;
+
+```
+
+#### customerType()
+Este é um método opcional que define o tipo de cliente(individual/corporation). Por padrão é 'individual'.
+
 # USO
 Para fazer uso é simples, basta usar o facade:
 ```php
@@ -90,6 +190,25 @@ $extras = [
 
 // cobrança com cartão validado
 $chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
+print_r($chargeWithCard);
+
+```
+
+### Adicionando dados do cliente na cobrança
+Adicionando dados do cliente no registro de cobrança da gateway.
+```php
+
+// cliente
+$client = \Auth::user();
+
+// validar o cartão
+$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
+
+$amount = 101.98;
+$installments = 1;
+
+// adiconando um cliente e efetuando cobrança
+$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::addCustomer(Client)->chargeWithCard($card->hash, $amount, $installments);
 print_r($chargeWithCard);
 
 ```

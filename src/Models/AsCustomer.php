@@ -5,7 +5,7 @@ namespace Ernandesrs\LapiPayment\Models;
 trait AsCustomer
 {
     /**
-     * Customer full id
+     * Customer id
      *
      * @return string
      */
@@ -44,7 +44,7 @@ trait AsCustomer
     }
 
     /**
-     * Customer country
+     * Customer phone numbers
      *
      * @return array
      */
