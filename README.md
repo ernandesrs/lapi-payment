@@ -212,3 +212,25 @@ $chargeWithCard = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($client)-
 print_r($chargeWithCard);
 
 ```
+
+### Adicionando produtos na cobrança
+Adicionando dados de produtos no registro de cobrança da gateway
+```php
+
+// validar o cartão
+$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
+
+// cliente
+$client = \Auth::user();
+
+// adicionando produtos/items
+$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addProduct(2109, 'Curso Digital', 99.00, 1, false);
+$lapipay->addProduct(19203, 'Notebook Gaming 3i', 3985.94, 1, true);
+$lapipay->addProduct(93030, 'Celular Top de Linha', 2985.94, 1, true);
+$lapipay->addCustomer(\Auth::user());
+
+$chargeWithcard = $lapipay->chargeWithCard($card->hash, 3985.94 + 99.00 + 2985.94, 1);
+
+var_dump($chargeWithcard);
+
+```
