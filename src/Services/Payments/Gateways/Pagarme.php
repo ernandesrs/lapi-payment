@@ -63,18 +63,7 @@ class Pagarme
      */
     public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
     {
-        $transaction = $this->charge($cardHash, $amount, $installments, 'credit_card', $metadata);
-
-        return !$transaction?->id ?
-            null :
-            new PaymentModel(
-                $transaction->id,
-                'pagarme',
-                'credit_card',
-                $transaction->amount,
-                $transaction->installments,
-                $transaction->status
-            );
+        return $this->charge($cardHash, $amount, $installments, 'credit_card', $metadata);
     }
 
     public function chargeWithBankSlip()
@@ -90,17 +79,28 @@ class Pagarme
      * @param integer $installments
      * @param string $method
      * @param array $metadata
-     * @return \ArrayObject
+     * @return null|\Ernandesrs\LapiPayment\Models\Payment
      */
     public function charge(string $cardHash, float $amount, int $installments, string $method, array $metadata = [])
     {
-        return $this->pagarme->transactions()->create([
+        $transaction = $this->pagarme->transactions()->create([
             'card_id' => $cardHash,
             'installments' => $installments,
             'amount' => $amount * 100,
             'payment_method' => $method,
             'metadata' => $metadata
         ]);
+
+        return !$transaction?->id ?
+            null :
+            new PaymentModel(
+                $transaction->id,
+                'pagarme',
+                $transaction->payment_method,
+                $transaction->amount,
+                $transaction->installments,
+                $transaction->status
+            );
     }
 
     /**
