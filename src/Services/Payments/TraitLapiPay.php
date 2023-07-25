@@ -17,6 +17,22 @@ trait TraitLapiPay
     }
 
     /**
+     * Add product
+     *
+     * @param string $id
+     * @param string $title
+     * @param string $unitPrice
+     * @param string $quantity
+     * @param boolean $isTangible
+     * @return LapiPay
+     */
+    public function addProduct(string $id, string $title, string $unitPrice, string $quantity, bool $isTangible)
+    {
+        $this->gatewayInstance->addProduct($id, $title, $unitPrice, $quantity, $isTangible);
+        return $this;
+    }
+
+    /**
      * Gateway
      *
      * @param string $gateway
@@ -25,7 +41,7 @@ trait TraitLapiPay
     public function gateway(string $gateway)
     {
         try {
-            $this->gatewayInstance = new ($this->gateways[$gateway]);
+            $this->gatewayInstance = new($this->gateways[$gateway]);
         } catch (\Exception $e) {
             throw new \Exception('"' . $gateway . '" is a invalid gateway');
         }

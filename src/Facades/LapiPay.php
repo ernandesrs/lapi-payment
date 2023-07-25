@@ -45,4 +45,19 @@ class LapiPay extends Facade
     {
         return (new LapiPayService())->addCustomer($user);
     }
+
+    /**
+     * Add product
+     *
+     * @param string $id
+     * @param string $title
+     * @param string $unitPrice
+     * @param string $quantity
+     * @param boolean $isTangible
+     * @return \Ernandesrs\LapiPayment\Services\Payments\LapiPay
+     */
+    public static function addProduct(string $id, string $title, string $unitPrice, string $quantity, bool $isTangible)
+    {
+        return (new LapiPayService())->addProduct($id, $title, $unitPrice, $quantity, $isTangible);
+    }
 }

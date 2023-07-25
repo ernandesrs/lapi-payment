@@ -22,11 +22,19 @@ class Pagarme
     private $customer;
 
     /**
+     * Products
+     *
+     * @var array
+     */
+    private $products;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->pagarme = new \PagarMe\Client($this->apiKey());
+        $this->products = [];
     }
 
     /**
@@ -102,6 +110,10 @@ class Pagarme
             $data['customer'] = $this->customer;
         }
 
+        if (count($this->products)) {
+            $data['items'] = $this->products;
+        }
+
         $transaction = $this->pagarme->transactions()->create($data);
 
         return !$transaction?->id ?
@@ -145,6 +157,28 @@ class Pagarme
             'documents' => $user->customerDocuments(),
             'phone_numbers' => $user->customerPhoneNumbers()
         ];
+        return $this;
+    }
+
+    /**
+     * Add product
+     *
+     * @param string $id
+     * @param string $title
+     * @param string $unitPrice
+     * @param string $quantity
+     * @param boolean $isTangible true if the product is not a digital product
+     * @return Pagarme
+     */
+    public function addProduct(string $id, string $title, string $unitPrice, string $quantity, bool $isTangible)
+    {
+        array_push($this->products, [
+            'id' => $id,
+            'title' => $title,
+            'unit_price' => $unitPrice * 100,
+            'quantity' => $quantity,
+            'tangible' => $isTangible
+        ]);
         return $this;
     }
 }
