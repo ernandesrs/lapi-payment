@@ -207,8 +207,8 @@ $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '
 $amount = 101.98;
 $installments = 1;
 
-// adiconando um cliente e efetuando cobrança
-$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::addCustomer($client)->chargeWithCard($card->hash, $amount, $installments);
+// adicionando um cliente e efetuando cobrança
+$chargeWithCard = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($client)->chargeWithCard($card->hash, $amount, $installments);
 print_r($chargeWithCard);
 
 ```
