@@ -30,7 +30,7 @@ class Test
 
         // adicionando billing
         $lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer(\Auth::user())
-            ->addBilling(\Auth::user()->customerName(), 'Rua Top', '246', '79827500', \Auth::user()->customerCountry(), 'MS', 'Dourados', 'Bairro top', 'Casa')
+            ->addBilling(\Auth::user()->customerName(), 'Rua Top', '246', '121234500', \Auth::user()->customerCountry(), 'MS', 'Dourados', 'Bairro top', 'Casa')
             ->addProduct(920932, 'Produto Digital Top', 99.99, 1, false)
             ->addProduct(382891, 'Produto Físico Top', 100.98, 1, true)
             ->chargeWithCard($card->hash, 99.99 + 100.98, 1, ['dados' => 'extras']);

@@ -234,3 +234,18 @@ $chargeWithcard = $lapipay->chargeWithCard($card->hash, 3985.94 + 99.00 + 2985.9
 var_dump($chargeWithcard);
 
 ```
+### Adicionando billing(dados de cobrança)
+Adicionando dados de cobrança
+```php
+
+        // card validation
+$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
+
+$chargeWithcard = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer(\Auth::user())
+    ->addBilling(\Auth::user()->customerName(), 'Rua Top', '246', '121234500', \Auth::user()->customerCountry(), 'MS', 'Dourados', 'Bairro top', 'Casa')
+    ->addProduct(920932, 'Produto Digital Top', 99.99, 1, false)
+    ->addProduct(382891, 'Produto Físico Top', 100.98, 1, true)
+    ->chargeWithCard($card->hash, 99.99 + 100.98, 1, ['dados' => 'extras']);
+var_dump($chargeWithcard);
+
+```
