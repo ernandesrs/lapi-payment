@@ -136,50 +136,42 @@ class Pagarme
     /**
      * Add a customer
      *
-     * @param \App\Models\User $user
+     * @param \App\Models\User $customer
      * @return Pagarme
      */
-    public function addCustomer(\App\Models\User $user)
+    public function addCustomer(\App\Models\User $customer)
     {
         $this->customer = (object) [
-            'external_id' => $user->customerId(),
-            'name' => $user->customerName(),
-            'email' => $user->customerEmail(),
-            'country' => $user->customerCountry(),
-            'type' => $user->customerType(),
-            'documents' => $user->customerDocuments(),
-            'phone_numbers' => $user->customerPhoneNumbers()
+            'external_id' => $customer->customerId(),
+            'name' => $customer->customerName(),
+            'email' => $customer->customerEmail(),
+            'country' => $customer->customerCountry(),
+            'type' => $customer->customerType(),
+            'documents' => $customer->customerDocuments(),
+            'phone_numbers' => $customer->customerPhoneNumbers()
         ];
         return $this;
     }
 
     /**
-     * Add a billingg
-     *
-     * @param string $name
-     * @param string $street
-     * @param string $streetNumber
-     * @param string $zipcode
-     * @param string $country
-     * @param string $state
-     * @param string $city
-     * @param string $neighborhood
-     * @param string $complementary
+     * Add a billing
+     * 
+     * @param \App\Models\User $customer
      * @return Pagarme
      */
-    public function addBilling(string $name, string $street, string $streetNumber, string $zipcode, string $country, string $state, string $city, string $neighborhood, string $complementary)
+    public function addBilling(\App\Models\User $customer)
     {
         $this->billing = (object) [
-            'name' => $name,
+            'name' => $customer->customerName(),
             'address' => [
-                'street' => $street,
-                'street_number' => $streetNumber,
-                'zipcode' => $zipcode,
-                'country' => $country,
-                'state' => $state,
-                'city' => $city,
-                'neighborhood' => $neighborhood,
-                'complementary' => $complementary
+                'street' => $customer->customerAddress()->street,
+                'street_number' => $customer->customerAddress()->streetNumber,
+                'zipcode' => $customer->customerAddress()->zipcode,
+                'country' => $customer->customerAddress()->country,
+                'state' => $customer->customerAddress()->state,
+                'city' => $customer->customerAddress()->city,
+                'neighborhood' => $customer->customerAddress()->neighborhood,
+                'complementary' => $customer->customerAddress()->complementary
             ]
         ];
         return $this;

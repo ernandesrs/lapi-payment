@@ -56,4 +56,11 @@ trait AsCustomer
      * @return array
      */
     abstract public function customerDocuments(): array;
+
+    /**
+     * Customer adress
+     *
+     * @return \Ernandesrs\LapiPayment\Models\Address
+     */
+    abstract public function customerAddress(): \Ernandesrs\LapiPayment\Models\Address;
 }

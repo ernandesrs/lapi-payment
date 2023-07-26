@@ -7,32 +7,24 @@ trait TraitLapiPay
     /**
      * Add customer
      *
-     * @param \App\Models\User $user
+     * @param \App\Models\User $customer
      * @return LapiPay
      */
-    public function addCustomer(\App\Models\User $user)
+    public function addCustomer(\App\Models\User $customer)
     {
-        $this->gatewayInstance->addCustomer($user);
+        $this->gatewayInstance->addCustomer($customer);
         return $this;
     }
 
     /**
      * Add a billingg
      *
-     * @param string $name
-     * @param string $street
-     * @param string $streetNumber
-     * @param string $zipcode
-     * @param string $country
-     * @param string $state
-     * @param string $city
-     * @param string $neighborhood
-     * @param string $complementary
+     * @param \App\Models\User $customer
      * @return LapiPay
      */
-    public function addBilling(string $name, string $street, string $streetNumber, string $zipcode, string $country, string $state, string $city, string $neighborhood, string $complementary)
+    public function addBilling(\App\Models\User $customer)
     {
-        $this->gatewayInstance->addBilling($name, $street, $streetNumber, $zipcode, $country, $state, $city, $neighborhood, $complementary);
+        $this->gatewayInstance->addBilling($customer);
         return $this;
     }
 
