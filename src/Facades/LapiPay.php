@@ -24,15 +24,15 @@ class LapiPay extends Facade
     /**
      * Charge with credit card
      *
-     * @param string $cardHash
+     * @param \Ernandesrs\LapiPayment\Models\Card $card
      * @param float $amount
      * @param integer $installments
      * @param array $metadata
      * @return null|\Ernandesrs\LapiPayment\Models\Payment
      */
-    public static function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
+    public static function chargeWithCard(\Ernandesrs\LapiPayment\Models\Card $card, float $amount, int $installments, array $metadata = [])
     {
-        return (new LapiPayService())->chargeWithCard($cardHash, $amount, $installments, $metadata);
+        return (new LapiPayService())->chargeWithCard($card, $amount, $installments, $metadata);
     }
 
     /**

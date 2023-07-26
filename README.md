@@ -79,14 +79,14 @@ class User extends Authenticatable
 <b>AsCustomer</b> possui alguns métodos obrigatórios e opcionais que precisam ou podem ser implementados no modelo User, veja:
 | MÉTODO | OBRIGATÓRIO | DESCRIÇÃO |
 | --- | --- | --- |
-| customerId() | Sim | Deverá retornar o id do cliente. |
-| customerName() | Sim | Deverá retornar o nome completo do cliente. |
-| customerEmail() | Sim | Deverá retornar o email do cliente. |
-| customerCountry() | Sim | Deverá retornar o país do cliente. |
-| customerPhoneNumbers() | Sim | Deverá retornar um array simples com pelo menos um número de telefone do cliente. |
-| customerDocuments() | Sim | Deverá retornar um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number. |
-| customerType() | Não | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i>. |
-| customerAddress()() | Sim | Deve retornar uma instância da classe <b>\Ernandesrs\LapiPayment\Models\Address</b>, que conterá o endereço do cliente. |
+| customerId() | Obrigatório | Deverá retornar o id do cliente. |
+| customerName() | Obrigatório | Deverá retornar o nome completo do cliente. |
+| customerEmail() | Obrigatório | Deverá retornar o email do cliente. |
+| customerCountry() | Obrigatório | Deverá retornar o país do cliente. |
+| customerPhoneNumbers() | Obrigatório | Deverá retornar um array simples com pelo menos um número de telefone do cliente. |
+| customerDocuments() | Obrigatório | Deverá retornar um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number. |
+| customerType() | Opcional | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i>. |
+| customerAddress()() | Obrigatório | Deve retornar uma instância da classe <b>\Ernandesrs\LapiPayment\Models\Address</b>, que conterá o endereço do cliente. |
 
 # USO
 Para fazer uso é simples, basta usar o facade <b>\Ernandesrs\LapiPayment\Facades\LapiPay</b>:
@@ -106,74 +106,81 @@ print_r($card);
 // validar o cartão
 $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
 
-$cardHash = $card->hash;
 $amount = 101.98;
 $installments = 1;
 $extras = [
-    'example' => 'example extra data',
-    'meta' => 'data',
-    'others' => 'information',
-    'more' => 'fields'
+    'example' => 'example extra data'
 ];
 
 // cobrança com cartão validado
-$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($cardHash, $amount, $installments, $extras);
+$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($card->hash, $amount, $installments, $extras);
 print_r($chargeWithCard);
 
 ```
 
-### Adicionando dados do cliente na cobrança
+### Adicionando cliente
 Adicionando dados do cliente no registro de cobrança da gateway.
 ```php
 
-// cliente
-$client = \Auth::user();
+// get customer
+$customer = \Auth::user();
 
-// validar o cartão
-$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
-
-$amount = 101.98;
-$installments = 1;
-
-// adicionando um cliente e efetuando cobrança
-$chargeWithCard = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($client)->chargeWithCard($card->hash, $amount, $installments);
-print_r($chargeWithCard);
+// add customer
+$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($customer)
 
 ```
 
-### Adicionando produtos na cobrança
-Adicionando dados de produtos no registro de cobrança da gateway
-```php
-
-// validar o cartão
-$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
-
-// cliente
-$client = \Auth::user();
-
-// adicionando produtos/items
-$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addProduct(2109, 'Curso Digital', 99.00, 1, false);
-$lapipay->addProduct(19203, 'Notebook Gaming 3i', 3985.94, 1, true);
-$lapipay->addProduct(93030, 'Celular Top de Linha', 2985.94, 1, true);
-$lapipay->addCustomer(\Auth::user());
-
-$chargeWithcard = $lapipay->chargeWithCard($card->hash, 3985.94 + 99.00 + 2985.94, 1);
-
-var_dump($chargeWithcard);
-
-```
 ### Adicionando billing(dados de cobrança)
-Adicionando dados de cobrança
+Adicionando dados de cobrança.
 ```php
 
-// card validation
-$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
+// get customer
+$customer = \Auth::user();
 
-$chargeWithcard = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer(\Auth::user())
-    ->addBilling(\Auth::user()->customerName(), 'Rua Top', '246', '121234500', \Auth::user()->customerCountry(), 'MS', 'Dourados', 'Bairro top', 'Casa')
-    ->addProduct(920932, 'Produto Digital Top', 99.99, 1, false)
-    ->addProduct(382891, 'Produto Físico Top', 100.98, 1, true)
-    ->chargeWithCard($card->hash, 99.99 + 100.98, 1, ['dados' => 'extras']);
-var_dump($chargeWithcard);
+// add customer
+$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addBilling($customer)
 
 ```
+
+### Adicionando produtos
+Adicionando dados de produtos no registro de cobrança da gateway.
+```php
+
+// adicionando um produto/item
+$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addProduct(2109, 'Curso Digital', 99.00, 1, false);
+
+// adicionando vários produtos/itens
+$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addProduct(2109, 'Produto Digital', 99.00, 1, false)
+    ->addProduct(9231, 'Produto Físico', 102.97, 1, true)
+    ->addProduct(9231, 'Outro Produto', 12.97, 1, false)
+    ->addProduct(9231, 'Mais Um Produto', 77.97, 1, false);
+
+```
+
+### Cobrança no cartão de crédito
+Efetuando uma cobrança no cartão de crédito.
+```php
+
+// validar o cartão
+$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
+
+// get customer
+$customer = \Auth::user();
+
+$amount = 99.00 + 102.97 + 12.97;
+$installments = 1;
+$metadata = [
+    'extra' => 'data'
+];
+
+$lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($customer)
+    ->addBilling($customer)
+    ->addProduct(2109, 'Produto Digital', 99.00, 1, false)
+    ->addProduct(9231, 'Produto Físico', 102.97, 1, true)
+    ->addProduct(9231, 'Outro Produto', 12.97, 1, false)
+    ->chargeWithCard($card, $amount, $installments, $metadata);
+
+var_dump($lapipay);
+
+```
+

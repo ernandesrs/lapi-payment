@@ -49,14 +49,14 @@ class LapiPay
     /**
      * Charge with credit card
      *
-     * @param string $cardHash
+     * @param \Ernandesrs\LapiPayment\Models\Card $card
      * @param float $amount
      * @param integer $installments
      * @param array $metadata
      * @return null|\Ernandesrs\LapiPayment\Models\Payment
      */
-    public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
+    public function chargeWithCard(\Ernandesrs\LapiPayment\Models\Card $card, float $amount, int $installments, array $metadata = [])
     {
-        return $this->gatewayInstance->chargeWithCard($cardHash, $amount, $installments, $metadata);
+        return $this->gatewayInstance->chargeWithCard($card, $amount, $installments, $metadata);
     }
 }

@@ -86,15 +86,15 @@ class Pagarme
     /**
      * Charge with credit card
      *
-     * @param string $cardHash
+     * @param \Ernandesrs\LapiPayment\Models\Card $card
      * @param float $amount
      * @param integer $installments
      * @param array $metadata
      * @return null|\Ernandesrs\LapiPayment\Models\Payment
      */
-    public function chargeWithCard(string $cardHash, float $amount, int $installments, array $metadata = [])
+    public function chargeWithCard(CardModel $card, float $amount, int $installments, array $metadata = [])
     {
-        return $this->charge($cardHash, $amount, $installments, 'credit_card', $metadata);
+        return $this->charge($card->hash, $amount, $installments, 'credit_card', $metadata);
     }
 
     /**
