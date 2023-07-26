@@ -26,7 +26,7 @@ PAYMENT_GATEWAY_PAGARME_API_ANTIFRAUD=false
 | CHAVE | DESCRIÇÃO |
 | --- |  --- |
 | PAYMENT_TESTING | Define se o sistema de cobrança está em testes. Se definido como <b><i>false</i></b>, o sistema de cobrança irá efetuar cobranças reais. |
-| PAYMENT_DEFAULT_GATEWAY | Define a gateway que será utilizada. Veja o [início da documentação as gateways implementadas](#gateways-implementados) |
+| PAYMENT_DEFAULT_GATEWAY | Define a gateway que será utilizada. Veja o [início da documentação as gateways implementadas].(#gateways-implementados) |
 | PAYMENT_GATEWAY_PAGARME_API_TEST | Chave de teste da api(cobranças falsas para testes). |
 | PAYMENT_GATEWAY_PAGARME_API_LIVE | Chave de produção da api(cobranças reais). |
 | PAYMENT_GATEWAY_PAGARME_API_ANTIFRAUD | Define se o recurso de antifraude está habilitado na Pagar.me. Quando habilitado, alguns dados extras são obrigatórios em cobranças com cartão de crédito. |
@@ -79,13 +79,13 @@ class User extends Authenticatable
 <b>AsCustomer</b> possui alguns métodos obrigatórios e opcionais que precisam ou podem ser implementados no modelo User, veja:
 | MÉTODO | OBRIGATÓRIO | DESCRIÇÃO |
 | --- | --- | --- |
-| customerId() | Sim | Retorna o id do cliente |
-| customerName() | Sim | Retorna o nome completo do cliente |
-| customerEmail() | Sim | Retorna o email do cliente |
-| customerCountry() | Sim | Retorna o país do cliente |
-| customerPhoneNumbers() | Sim | Retorna um array simples com pelo menos um número de telefone do cliente |
-| customerDocuments() | Sim | Retorna um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number |
-| customerType() | Não | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i> |
+| customerId() | Sim | Deverá retornar o id do cliente. |
+| customerName() | Sim | Deverá retornar o nome completo do cliente. |
+| customerEmail() | Sim | Deverá retornar o email do cliente. |
+| customerCountry() | Sim | Deverá retornar o país do cliente. |
+| customerPhoneNumbers() | Sim | Deverá retornar um array simples com pelo menos um número de telefone do cliente. |
+| customerDocuments() | Sim | Deverá retornar um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number. |
+| customerType() | Não | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i>. |
 
 # USO
 Para fazer uso é simples, basta usar o facade <b>\Ernandesrs\LapiPayment\Facades\LapiPay</b>:
