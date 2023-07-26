@@ -89,7 +89,7 @@ class User extends Authenticatable
 | customerAddress()() | Obrigatório | Deve retornar uma instância da classe <b>[\Ernandesrs\LapiPayment\Models\Address](src/Models/Address.php)</b>, que conterá o endereço do cliente. |
 
 # USO
-Para fazer uso é simples, basta usar o facade <b>\Ernandesrs\LapiPayment\Facades\LapiPay</b>:
+Para fazer uso é simples, basta usar o facade <b>[\Ernandesrs\LapiPayment\Facades\LapiPay](src/Facades/LapiPay.php)</b>:
 
 # EXEMPLOS DE USO
 ### Criando/validando um cartão
@@ -97,24 +97,6 @@ Para fazer uso é simples, basta usar o facade <b>\Ernandesrs\LapiPayment\Facade
 
 $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
 print_r($card);
-
-```
-
-### Fazendo uma cobrança no cartão de crédito
-```php
-
-// validar o cartão
-$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
-
-$amount = 101.98;
-$installments = 1;
-$extras = [
-    'example' => 'example extra data'
-];
-
-// cobrança com cartão validado
-$chargeWithCard = \Ernandesrs\LapiPayment\Facades\Payment::chargeWithCard($card->hash, $amount, $installments, $extras);
-print_r($chargeWithCard);
 
 ```
 
@@ -157,7 +139,7 @@ $lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addProduct(2109, 'Produto Di
 
 ```
 
-### Cobrança no cartão de crédito
+### Realizando cobrança
 Efetuando uma cobrança no cartão de crédito.
 ```php
 
