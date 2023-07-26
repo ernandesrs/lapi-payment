@@ -17,9 +17,16 @@ class Pagarme
     /**
      * Customer
      *
-     * @var array
+     * @var object
      */
     private $customer;
+
+    /**
+     * Billing
+     *
+     * @var object
+     */
+    private $billing;
 
     /**
      * Products
@@ -29,11 +36,20 @@ class Pagarme
     private $products;
 
     /**
+     * Data
+     * 
+     * @var array
+     */
+    private $data;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->pagarme = new \PagarMe\Client($this->apiKey());
+        $this->customer = (object) [];
+        $this->billing = (object) [];
         $this->products = [];
     }
 
@@ -81,11 +97,6 @@ class Pagarme
         return $this->charge($cardHash, $amount, $installments, 'credit_card', $metadata);
     }
 
-    public function chargeWithBankSlip()
-    {
-        // 
-    }
-
     /**
      * Charge
      *
@@ -98,7 +109,7 @@ class Pagarme
      */
     public function charge(string $cardHash, float $amount, int $installments, string $method, array $metadata = [])
     {
-        $data = [
+        $this->data = [
             'card_id' => $cardHash,
             'installments' => $installments,
             'amount' => $amount * 100,
@@ -106,15 +117,9 @@ class Pagarme
             'metadata' => $metadata
         ];
 
-        if ($this->customer?->external_id) {
-            $data['customer'] = $this->customer;
-        }
+        $this->antifraudFields($method);
 
-        if (count($this->products)) {
-            $data['items'] = $this->products;
-        }
-
-        $transaction = $this->pagarme->transactions()->create($data);
+        $transaction = $this->pagarme->transactions()->create($this->data);
 
         return !$transaction?->id ?
             null :
@@ -126,18 +131,6 @@ class Pagarme
                 $transaction->installments,
                 $transaction->status
             );
-    }
-
-    /**
-     * Get api key
-     *
-     * @return string
-     */
-    private function apiKey()
-    {
-        return config('lapi-payment.testing') === true ?
-            config('lapi-payment.pagarme.test_api_key') :
-            config('lapi-payment.pagarme.live_api_key');
     }
 
     /**
@@ -180,5 +173,51 @@ class Pagarme
             'tangible' => $isTangible
         ]);
         return $this;
+    }
+
+    /**
+     * Antifraud fields check and set
+     *
+     * @param string $method
+     * @return void
+     * @exception \Exception
+     */
+    private function antifraudFields(string $method)
+    {
+        if (
+            $method == 'credit_card' &&
+            config('lapi-payment.pagarme.anti_fraud') &&
+            (
+                !($this->customer->external_id ?? null) ||
+                !($this->billing->external_id ?? null) ||
+                count($this->products) < 1
+            )
+        ) {
+            throw new \Exception('Need customer, billing and products when anti-fraud is enabled');
+        }
+
+        if ($this->customer?->external_id ?? null) {
+            $this->data['customer'] = $this->customer;
+        }
+
+        if ($this->billing?->external_id ?? null) {
+            $this->data['billing'] = $this->billing;
+        }
+
+        if (count($this->products)) {
+            $this->data['items'] = $this->products;
+        }
+    }
+
+    /**
+     * Get api key
+     *
+     * @return string
+     */
+    private function apiKey()
+    {
+        return config('lapi-payment.testing') === true ?
+            config('lapi-payment.pagarme.test_api_key') :
+            config('lapi-payment.pagarme.live_api_key');
     }
 }

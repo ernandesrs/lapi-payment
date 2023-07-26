@@ -10,6 +10,7 @@ return [
 
     'pagarme' => [
         'test_api_key' => env('PAYMENT_GATEWAY_PAGARME_API_TEST'),
-        'live_api_key' => env('PAYMENT_GATEWAY_PAGARME_API_TEST')
+        'live_api_key' => env('PAYMENT_GATEWAY_PAGARME_API_TEST'),
+        'anti_fraud' => env('PAYMENT_GATEWAY_PAGARME_API_ANTIFRAUD')
     ]
 ];
