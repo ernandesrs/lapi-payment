@@ -17,6 +17,26 @@ trait TraitLapiPay
     }
 
     /**
+     * Add a billingg
+     *
+     * @param string $name
+     * @param string $street
+     * @param string $streetNumber
+     * @param string $zipcode
+     * @param string $country
+     * @param string $state
+     * @param string $city
+     * @param string $neighborhood
+     * @param string $complementary
+     * @return LapiPay
+     */
+    public function addBilling(string $name, string $street, string $streetNumber, string $zipcode, string $country, string $state, string $city, string $neighborhood, string $complementary)
+    {
+        $this->gatewayInstance->addBilling($name, $street, $streetNumber, $zipcode, $country, $state, $city, $neighborhood, $complementary);
+        return $this;
+    }
+
+    /**
      * Add product
      *
      * @param string $id

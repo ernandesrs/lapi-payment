@@ -154,6 +154,38 @@ class Pagarme
     }
 
     /**
+     * Add a billingg
+     *
+     * @param string $name
+     * @param string $street
+     * @param string $streetNumber
+     * @param string $zipcode
+     * @param string $country
+     * @param string $state
+     * @param string $city
+     * @param string $neighborhood
+     * @param string $complementary
+     * @return Pagarme
+     */
+    public function addBilling(string $name, string $street, string $streetNumber, string $zipcode, string $country, string $state, string $city, string $neighborhood, string $complementary)
+    {
+        $this->billing = (object) [
+            'name' => $name,
+            'address' => [
+                'street' => $street,
+                'street_number' => $streetNumber,
+                'zipcode' => $zipcode,
+                'country' => $country,
+                'state' => $state,
+                'city' => $city,
+                'neighborhood' => $neighborhood,
+                'complementary' => $complementary
+            ]
+        ];
+        return $this;
+    }
+
+    /**
      * Add product
      *
      * @param string $id
@@ -189,7 +221,7 @@ class Pagarme
             config('lapi-payment.pagarme.anti_fraud') &&
             (
                 !($this->customer->external_id ?? null) ||
-                !($this->billing->external_id ?? null) ||
+                !($this->billing->name ?? null) ||
                 count($this->products) < 1
             )
         ) {
@@ -200,7 +232,7 @@ class Pagarme
             $this->data['customer'] = $this->customer;
         }
 
-        if ($this->billing?->external_id ?? null) {
+        if ($this->billing?->name ?? null) {
             $this->data['billing'] = $this->billing;
         }
 

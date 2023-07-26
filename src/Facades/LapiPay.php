@@ -47,6 +47,25 @@ class LapiPay extends Facade
     }
 
     /**
+     * Add a billingg
+     *
+     * @param string $name
+     * @param string $street
+     * @param string $streetNumber
+     * @param string $zipcode
+     * @param string $country
+     * @param string $state
+     * @param string $city
+     * @param string $neighborhood
+     * @param string $complementary
+     * @return \Ernandesrs\LapiPayment\Services\Payments\LapiPay
+     */
+    public function addBilling(string $name, string $street, string $streetNumber, string $zipcode, string $country, string $state, string $city, string $neighborhood, string $complementary)
+    {
+        return (new LapiPayService())->addBilling($name, $street, $streetNumber, $zipcode, $country, $state, $city, $neighborhood, $complementary);
+    }
+
+    /**
      * Add product
      *
      * @param string $id
