@@ -86,7 +86,7 @@ class User extends Authenticatable
 | customerPhoneNumbers() | Obrigatório | Deverá retornar um array simples com pelo menos um número de telefone do cliente. |
 | customerDocuments() | Obrigatório | Deverá retornar um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number. |
 | customerType() | Opcional | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i>. |
-| customerAddress()() | Obrigatório | Deve retornar uma instância da classe <b>\Ernandesrs\LapiPayment\Models\Address</b>, que conterá o endereço do cliente. |
+| customerAddress()() | Obrigatório | Deve retornar uma instância da classe <b>[\Ernandesrs\LapiPayment\Models\Address](src/Models/Address.php)</b>, que conterá o endereço do cliente. |
 
 # USO
 Para fazer uso é simples, basta usar o facade <b>\Ernandesrs\LapiPayment\Facades\LapiPay</b>:
