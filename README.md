@@ -14,21 +14,24 @@ Guia de configuração do pacote LAPI PAYMENT.
 ### Variáveis ambientes
 No arquivo <b>.env</b> do seu projeto, adicione as seguintes variáveis:
 ```
+
 PAYMENT_TESTING=true
 PAYMENT_DEFAULT_GATEWAY=GATEWAY NAME
 PAYMENT_GATEWAY_PAGARME_API_TEST=YOUR API KEY TEST
 PAYMENT_GATEWAY_PAGARME_API_LIVE=YOUR API KEY LIVE
+PAYMENT_GATEWAY_PAGARME_API_ANTIFRAUD=false
+
 ```
 
-<b>PAYMENT_TESTING</b> define se o sistema de cobrança está em testes. Se definido como <b><i>false</i></b>, o sistema de cobrança irá efetuar cobranças reais.
+| CHAVE | DESCRIÇÃO |
+| --- |  --- |
+| PAYMENT_TESTING | Define se o sistema de cobrança está em testes. Se definido como <b><i>false</i></b>, o sistema de cobrança irá efetuar cobranças reais. |
+| PAYMENT_DEFAULT_GATEWAY | Define a gateway que será utilizada. Veja o [início da documentação as gateways implementadas](#gateways-implementados) |
+| PAYMENT_GATEWAY_PAGARME_API_TEST | Chave de teste da api(cobranças falsas para testes). |
+| PAYMENT_GATEWAY_PAGARME_API_LIVE | Chave de produção da api(cobranças reais). |
+| PAYMENT_GATEWAY_PAGARME_API_ANTIFRAUD | Define se o recurso de antifraude está habilitado na Pagar.me. Quando habilitado, alguns dados extras são obrigatórios em cobranças com cartão de crédito. |
 
-<b>PAYMENT_DEFAULT_GATEWAY</b> define a gateway que será utilizada. Veja o [início da documentação as gateways implementadas](#gateways-implementados).
-
-<b>PAYMENT_GATEWAY_PAGARME_API_TEST</b> chave de teste da api(cobranças falsas para testes).
-
-<b>PAYMENT_GATEWAY_PAGARME_API_LIVE</b> chave de produção da api(cobranças reais).
-
-### Adicione o sevice provider
+### Adicione o Sevice Provider
 Em <b>/config/app.php</b> adicione <b>ErnandesRS\LapiPayment\LapiPaymentServiceProvider::class</b> no item <b>'providers'</b>. Vai ficar assim:
 ```php
 
@@ -50,14 +53,14 @@ return [
 
 ```
 
-### Publique o arquivo de configuração
-Na raiz do projeto Laravel, publique o arquivo de configuração com o seguinte comando:
+### (Opcional) Publique o arquivo de configuração
+Na raiz do seu projeto Laravel, publique o arquivo de configuração com o seguinte comando:
 > php artisan vendor:publish --tag=lapi-payment-config
 
 O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>.
 
-### Faça uso da trait AsCustomer
-Na seu modelo de usuário <b><i>\App\Models\User</i></b>, faça uso da trait <b>AsCustomer</b>, seu modelo ficará parecido com isso:
+### Faça uso da trait AsCustomer no modelo User
+Na seu modelo de usuário <b><i>\App\Models\User</i></b>, faça o uso da trait <b>AsCustomer</b>, seu modelo ficará parecido com isso:
 ```php
 
 <?php
@@ -72,98 +75,22 @@ class User extends Authenticatable
     use AsCustomer;
 
 ```
-
-Agora é preciso implementar alguns métodos obrigatórios no modelo User:
-```php
-
-    /**
-     * Customer id
-     *
-     * @return string
-     */
-    abstract public function customerId(): string;
-
-    /**
-     * Customer full name
-     *
-     * @return string
-     */
-    abstract public function customerName(): string;
-
-    /**
-     * Customer email
-     *
-     * @return string
-     */
-    abstract public function customerEmail(): string;
-
-    /**
-     * Customer country
-     *
-     * @return string
-     */
-    abstract public function customerCountry(): string;
-
-    /**
-     * Customer phone numbers
-     *
-     * @return array
-     */
-    abstract public function customerPhoneNumbers(): array;
-
-    /**
-     * Customer documents
-     *
-     * @return array
-     */
-    abstract public function customerDocuments(): array;
-
-```
-
-Em sua maioria, os métodos não precisam de explicação e são bem intuitivos, mas algumas são necessários, veja:
-
-#### customerPhoneNumbers()
-O método deverá retornar um array simples contendo ao menos um número de telefone do cliente.
-```php
-
-abstract public function customerPhoneNumbers(): array;
-
-```
-
-#### customerDocuments()
-O método deverá retornar um array de arrays os dados dos documentos do cliente, seguindo exemplo no comentário do código abaixo.
-```php
-
-/**
- * 
- * Example:
- * [
- *      [
- *          'type' => 'cpf',
- *          'number' => '00000000011'
- *      ],
- *      [
- *          'type' => 'rg',
- *          'number' => '12345679'
- *      ]
- * ]
- * 
- */
-abstract public function customerDocuments(): array;
-
-```
-
-#### customerType()
-É um método opcional que define o tipo de cliente(individual/corporation). Por padrão é 'individual'.
+### Métodos da trait AsCustomer
+<b>AsCustomer</b> possui alguns métodos obrigatórios e opcionais que precisam ou podem ser implementados no modelo User, veja:
+| MÉTODO | OBRIGATÓRIO | DESCRIÇÃO |
+| --- | --- | --- |
+| customerId() | Sim | Retorna o id do cliente |
+| customerName() | Sim | Retorna o nome completo do cliente |
+| customerEmail() | Sim | Retorna o email do cliente |
+| customerCountry() | Sim | Retorna o país do cliente |
+| customerPhoneNumbers() | Sim | Retorna um array simples com pelo menos um número de telefone do cliente |
+| customerDocuments() | Sim | Retorna um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number |
+| customerType() | Não | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i> |
 
 # USO
-Para fazer uso é simples, basta usar o facade:
-```php
+Para fazer uso é simples, basta usar o facade <b>\Ernandesrs\LapiPayment\Facades\LapiPay</b>:
 
-\Ernandesrs\LapiPayment\Facades\LapiPay
-
-```
-
+# EXEMPLOS DE USO
 ### Criando/validando um cartão
 ```php
 
@@ -238,7 +165,7 @@ var_dump($chargeWithcard);
 Adicionando dados de cobrança
 ```php
 
-        // card validation
+// card validation
 $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
 
 $chargeWithcard = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer(\Auth::user())
