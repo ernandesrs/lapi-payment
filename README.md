@@ -113,7 +113,7 @@ $lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($customer)
 ```
 
 ### Adicionando billing(dados de cobrança)
-Adicionando dados de cobrança.
+Adicionando dados de cobrança. Esta ação irá definir o nome e os dados de endereço que será obtido pelo método customerAddress() [implementado aqui](#métodos-da-trait-ascustomer).
 ```php
 
 // get customer
