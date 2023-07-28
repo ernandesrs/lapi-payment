@@ -54,7 +54,7 @@ class Pagarme
     }
 
     /**
-     * Create card
+     * Validate and create a card
      *
      * @param string $holderName
      * @param string $number
@@ -73,14 +73,7 @@ class Pagarme
 
         return !$card?->valid ?
             null :
-            (new CardModel())->construct(
-                $card->id,
-                $card->holder_name,
-                $card->last_digits,
-                $card->expiration_date,
-                $card->country,
-                'pagarme'
-            );
+            $card;
     }
 
     /**

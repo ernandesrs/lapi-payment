@@ -8,17 +8,18 @@ use Ernandesrs\LapiPayment\Services\Payments\LapiPay as LapiPayService;
 class LapiPay extends Facade
 {
     /**
-     * Validate a card
+     * Validate and save a card
      *
+     * @param \App\Models\User $user
      * @param string $holderName
      * @param string $number
      * @param string $cvv
      * @param string $expiration
      * @return null|\Ernandesrs\LapiPayment\Models\Card
      */
-    public static function createCard(string $holderName, string $number, string $cvv, string $expiration)
+    public static function createCard(\App\Models\User $user, string $holderName, string $number, string $cvv, string $expiration)
     {
-        return (new LapiPayService())->createCard($holderName, $number, $cvv, $expiration);
+        return (new LapiPayService())->createCard($user, $holderName, $number, $cvv, $expiration);
     }
 
     /**

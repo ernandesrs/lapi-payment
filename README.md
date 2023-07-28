@@ -91,15 +91,28 @@ class User extends Authenticatable
 # USO
 Para fazer uso é simples, basta usar o facade <b>[\Ernandesrs\LapiPayment\Facades\LapiPay](src/Facades/LapiPay.php)</b>:
 
-# EXEMPLOS DE USO
-### Criando/validando um cartão
+## Cartões
+### Validando e salvando um cartão
+O método <i>\Ernandesrs\LapiPayment\Facades\LapiPay::createCard</i> valida um cartão com a gateway e o salva no banco de dados. O cartão pertencerá ao usuário injetado.
 ```php
 
-$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard('The Holder Name', '4916626701217934', '156', '0424');
+$user = \Auth::user();
+$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
 print_r($card);
 
 ```
 
+### Recuperandos cartões
+Recupera todos os cartões validados e salvos para o usuário.
+```php
+
+$user = \Auth::user();
+$cards = $user->cards()->get();
+print_r($cards);
+
+```
+
+## Cobranças
 ### Adicionando cliente
 Adicionando dados do cliente no registro de cobrança da gateway.
 ```php

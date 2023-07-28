@@ -5,6 +5,16 @@ namespace Ernandesrs\LapiPayment\Models;
 trait AsCustomer
 {
     /**
+     * Get all of the cards for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cards(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Card::class, 'user_id', 'id');
+    }
+
+    /**
      * Customer id
      *
      * @return string
