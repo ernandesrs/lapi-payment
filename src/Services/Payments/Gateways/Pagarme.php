@@ -116,6 +116,28 @@ class Pagarme
     }
 
     /**
+     * Refund a payment
+     *
+     * @param PaymentModel $payment the payment
+     * @param float|null $amount amount to refund. Full refund when null.
+     * @param array $metadata
+     * @return null|\ArrayObject
+     */
+    public function refundPayment(PaymentModel $payment, ?float $amount = null, array $metadata = [])
+    {
+        $data = [
+            'id' => $payment->transaction_id,
+            'metadata' => $metadata
+        ];
+
+        if ($amount) {
+            $data['amount'] = $amount * 100;
+        }
+
+        return $this->pagarme->transactions()->refund($data);
+    }
+
+    /**
      * Add a customer
      *
      * @param \App\Models\User $customer

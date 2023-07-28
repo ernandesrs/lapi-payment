@@ -176,3 +176,24 @@ var_dump($lapipay);
 
 ```
 
+### Realizando reembolsos
+Efetuando um reembolso parcial.
+```php
+
+$payment = \Auth::user()->payments()->first();
+
+$refund = \Ernandesrs\LapiPayment\Facades\LapiPay::refundPayment($payment, 50.00, ['reason' => 'Lorem ipsum dolor sit']);
+var_dump($refund);
+
+```
+
+Efetuando um reembolso total.
+```php
+
+$payment = \Auth::user()->payments()->first();
+
+$refund = \Ernandesrs\LapiPayment\Facades\LapiPay::refundPayment($payment, null, ['reason' => 'Lorem ipsum dolor sit']);
+var_dump($refund);
+
+```
+

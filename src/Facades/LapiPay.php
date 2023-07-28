@@ -38,6 +38,19 @@ class LapiPay extends Facade
     }
 
     /**
+     * Refund payment
+     *
+     * @param \Ernandesrs\LapiPayment\Models\Payment $payment
+     * @param float|null $amount amount to refund. Full refund when null.
+     * @param array $metadata
+     * @return \Ernandesrs\LapiPayment\Models\Payment
+     */
+    public static function refundPayment(\Ernandesrs\LapiPayment\Models\Payment $payment, ?float $amount = null, array $metadata = [])
+    {
+        return (new LapiPayService())->refundPayment($payment, $amount, $metadata);
+    }
+
+    /**
      * Add a customer
      *
      * @param \App\Models\User $customer

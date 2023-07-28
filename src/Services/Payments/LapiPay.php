@@ -3,6 +3,7 @@
 namespace Ernandesrs\LapiPayment\Services\Payments;
 
 use Ernandesrs\LapiPayment\Exceptions\InvalidCardException;
+use Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException;
 use Ernandesrs\LapiPayment\Models\Card;
 use Ernandesrs\LapiPayment\Models\Payment;
 
@@ -96,5 +97,29 @@ class LapiPay
             'installments' => $transaction->installments,
             'status' => $transaction->status
         ]);
+    }
+
+    /**
+     * Refund payment
+     *
+     * @param Payment $payment
+     * @param float|null $amount amount to refund. Full refund when null.
+     * @param array $metadata
+     * @return Payment
+     * @exception \Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException
+     */
+    public function refundPayment(Payment $payment, ?float $amount = null, array $metadata = [])
+    {
+        if ($payment->status == 'refunded') {
+            throw new PaymentHasAlreadyBeenRefundedException();
+        }
+
+        $refund = $this->gatewayInstance->refundPayment($payment, $amount, $metadata);
+
+        $payment->amount = $amount && $amount < $payment->amount ? ($payment->amount - $amount) : $payment->amount;
+        $payment->status = $refund->status;
+        $payment->save();
+
+        return $payment;
     }
 }
