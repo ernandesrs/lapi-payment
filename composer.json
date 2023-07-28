@@ -1,0 +1,25 @@
+{
+    "name": "ernandesrs/lapi-payment",
+    "description": "Payment",
+    "type": "library",
+    "require": {
+        "pagarme/pagarme-php": "^4.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ernandesrs\\LapiPayment\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ernandesrs\\Test\\": "test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ernandes R Souza",
+            "email": "ernandesrsouza@gmail.com"
+        }
+    ]
+}
