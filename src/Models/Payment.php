@@ -20,4 +20,14 @@ class Payment extends Model
         'installments',
         'status'
     ];
+
+    /**
+     * Get payment details
+     *
+     * @return null|\ArrayObject
+     */
+    public function details()
+    {
+        return (new \Ernandesrs\LapiPayment\Services\Payments\LapiPay())->paymentDetails($this);
+    }
 }

@@ -51,6 +51,17 @@ class LapiPay extends Facade
     }
 
     /**
+     * Get payment details registered by configured gateway
+     *
+     * @param \Ernandesrs\LapiPayment\Models\Payment $payment
+     * @return null|\ArrayObject
+     */
+    public static function paymentDetails(\Ernandesrs\LapiPayment\Models\Payment $payment)
+    {
+        return (new LapiPayService())->paymentDetails($payment);
+    }
+
+    /**
      * Add a customer
      *
      * @param \App\Models\User $customer

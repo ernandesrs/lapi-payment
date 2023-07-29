@@ -197,3 +197,17 @@ var_dump($refund);
 
 ```
 
+### Obtendo detalhes do pagamento
+Obtendo detalhes do pagamento registrado pela gateway configurada.
+```php
+
+// first way
+$details = $user->payments()->first()->details();
+var_dump($details);
+
+// second way
+$payment = $user->payments()->first();
+$details = \Ernandesrs\LapiPayment\Facades\LapiPay::paymentDetails($payment);
+var_dump($details);
+
+```

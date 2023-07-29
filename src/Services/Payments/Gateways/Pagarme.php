@@ -138,6 +138,21 @@ class Pagarme
     }
 
     /**
+     * Payment details
+     *
+     * @param string $transactionId
+     * @return null|\ArrayObject
+     */
+    public function paymentDetails(string $transactionId)
+    {
+        $transaction = $this->pagarme->transactions()->get([
+            'id' => $transactionId
+        ]);
+
+        return $transaction->id ?? null ? $transaction : null;
+    }
+
+    /**
      * Add a customer
      *
      * @param \App\Models\User $customer

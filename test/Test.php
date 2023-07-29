@@ -35,10 +35,14 @@ class Test
         //     ->chargeWithCard($user, $card, 89, 1);
         // var_dump($payment);
 
-        $payment = $user->payments()->where('id', 3)->first();
+        // $payment = $user->payments()->where('id', 3)->first();
 
-        $refund = \Ernandesrs\LapiPayment\Facades\LapiPay::refundPayment($payment, 50.00, ['reason' => 'Lorem ipsum dolor sit']);
+        // $refund = \Ernandesrs\LapiPayment\Facades\LapiPay::refundPayment($payment, 50.00, ['reason' => 'Lorem ipsum dolor sit']);
 
-        var_dump($refund);
+        // var_dump($refund);
+
+        $payment = $user->payments()->where('id', 1)->first();
+        // var_dump($payment->details());
+        var_dump(\Ernandesrs\LapiPayment\Facades\LapiPay::paymentDetails($payment));
     }
 }

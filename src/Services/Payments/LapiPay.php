@@ -122,4 +122,15 @@ class LapiPay
 
         return $payment;
     }
+
+    /**
+     * Get payment details registered by gateway
+     *
+     * @param Payment $payment
+     * @return null|\ArrayObject
+     */
+    public function paymentDetails(Payment $payment)
+    {
+        return $this->gatewayInstance->paymentDetails($payment->transaction_id);
+    }
 }
