@@ -46,25 +46,28 @@ class LapiPay
      * @param string $cvv
      * @param string $expiration
      * @return null|Card
-     * @exception InvalidCardException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidCardException|\Ernandesrs\LapiPayment\Exceptions\InvalidDataException
      */
     public function createCard(\App\Models\User $user, string $holderName, string $number, string $cvv, string $expiration)
     {
-        $response = $this->gatewayInstance->createCard($holderName, $number, $cvv, $expiration);
+        $validated = \Ernandesrs\LapiPayment\Services\Validator::validateCard($holderName, $number, $cvv, $expiration);
 
-        if (!$response) {
-            throw new InvalidCardException();
-        }
+        $card = $this->gatewayInstance->createCard(
+            $validated['holder_name'],
+            $validated['number'],
+            $validated['cvv'],
+            $validated['expiration']
+        );
 
-        return $user->cards()->firstOrCreate([
-            'hash' => $response->id,
-            'holder_name' => $response->holder_name,
-            'last_digits' => $response->last_digits,
-            'brand' => $response->brand,
-            'expiration_date' => $response->expiration_date,
-            'country' => $response->country,
+        return !$card ? throw new InvalidCardException() : $user->cards()->firstOrCreate([
+            'hash' => $card->id,
+            'holder_name' => $card->holder_name,
+            'last_digits' => $card->last_digits,
+            'brand' => $card->brand,
+            'expiration_date' => $card->expiration_date,
+            'country' => $card->country,
             'gateway' => config('lapi-payment.gateway'),
-            'valid' => $response->valid
+            'valid' => $card->valid
         ]);
     }
 
@@ -77,7 +80,7 @@ class LapiPay
      * @param integer $installments
      * @param array $metadata
      * @return null|Payment
-     * @exception
+     * @throws
      */
     public function chargeWithCard(\App\Models\User $user, Card $card, float $amount, int $installments, array $metadata = [])
     {
@@ -106,7 +109,7 @@ class LapiPay
      * @param float|null $amount amount to refund. Full refund when null.
      * @param array $metadata
      * @return Payment
-     * @exception \Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException
      */
     public function refundPayment(Payment $payment, ?float $amount = null, array $metadata = [])
     {

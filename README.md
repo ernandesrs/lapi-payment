@@ -102,6 +102,27 @@ print_r($card);
 
 ```
 
+#### Erros na validação do cartão
+Os dados do cartão passarão por uma validação prévia, antes de serem enviados para a gateway. Ao ocorrer qualquer erro na validação, uma exceção <i>\Ernandesrs\LapiPayment\Exceptions\InvalidDataException</i> será lançada e um array com as mensagens com detalhes sobre o(s) erro(s) serão armazenados na sessão do usuário(este array é um array retornado pelo validador do Laravel).
+Veja abaixo a forma para recuperar essas mensagens:
+```php
+
+try {
+    // try validate, create and save card
+    $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
+
+    // success
+    print_r($card);
+} catch(\Ernandesrs\LapiPayment\Exceptions\InvalidDataException $e) {
+    // get error messages
+    $errors = \Ernandesrs\LapiPayment\Facades\LapiPay::errorMessages();
+
+    // fail
+    print_r($errors);
+}
+
+```
+
 ### Recuperandos cartões
 Recupera todos os cartões validados e salvos para o usuário.
 ```php

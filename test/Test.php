@@ -10,8 +10,12 @@ class Test
         $user = \App\Models\User::where("id", 1)->first();
 
         // // validar o cartão
-        // $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
-
+        try {
+            $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, $user->customerName(), '4916626701217934', '156', '0424');
+            var_dump($card);
+        } catch (\Exception $e) {
+            var_dump(\Ernandesrs\LapiPayment\Facades\LapiPay::errorMessages());
+        }
         // $amount = 99.00 + 102.97 + 12.97;
         // $installments = 1;
         // $metadata = [
@@ -41,8 +45,8 @@ class Test
 
         // var_dump($refund);
 
-        $payment = $user->payments()->where('id', 1)->first();
+        // $payment = $user->payments()->where('id', 1)->first();
         // var_dump($payment->details());
-        var_dump(\Ernandesrs\LapiPayment\Facades\LapiPay::paymentDetails($payment));
+        // var_dump(\Ernandesrs\LapiPayment\Facades\LapiPay::paymentDetails($payment));
     }
 }

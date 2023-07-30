@@ -16,6 +16,7 @@ class LapiPay extends Facade
      * @param string $cvv
      * @param string $expiration
      * @return null|\Ernandesrs\LapiPayment\Models\Card
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidCardException|\Ernandesrs\LapiPayment\Exceptions\InvalidDataException
      */
     public static function createCard(\App\Models\User $user, string $holderName, string $number, string $cvv, string $expiration)
     {
@@ -96,5 +97,15 @@ class LapiPay extends Facade
     public static function addProduct(string $id, string $title, string $unitPrice, string $quantity, bool $isTangible)
     {
         return (new LapiPayService())->addProduct($id, $title, $unitPrice, $quantity, $isTangible);
+    }
+
+    /**
+     * Get error messages
+     *
+     * @return array
+     */
+    public static function errorMessages()
+    {
+        return (new LapiPayService())->errorMessages();
     }
 }

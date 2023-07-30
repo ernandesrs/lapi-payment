@@ -45,6 +45,16 @@ trait TraitLapiPay
     }
 
     /**
+     * Get error messages
+     *
+     * @return array
+     */
+    public function errorMessages()
+    {
+        return \Ernandesrs\LapiPayment\Services\Validator::errorMessages();
+    }
+
+    /**
      * Gateway
      *
      * @param string $gateway
