@@ -250,6 +250,33 @@ var_dump($refund);
 
 ```
 
+### Erros de validação nos dados de reembolso
+Ao reembolsar, o valor será validado antes e uma exceção <i>\Ernandesrs\LapiPayment\Exceptions\InvalidDataException</i> será lançada em caso de falha na validação. Veja baixo como capturar informações sobre o erro ocorrido.
+```php
+
+try {
+    // get payment
+    $payment = $user->payments()->first();
+
+    // try refund payment
+    $refund = \Ernandesrs\LapiPayment\Facades\LapiPay::refundPayment($payment, null, ['reason' => 'Lorem ipsum dolor sit']);
+    
+    // success
+    var_dump($refund);
+} catch(\Ernandesrs\LapiPayment\Exceptions\InvalidDataException $e) {
+    // get error messages
+    $errors = \Ernandesrs\LapiPayment\Facades\LapiPay::errorMessages();
+
+    // fail
+    print_r($errors);
+}
+
+```
+Outras exceções(ambas no namespace <i>\Ernandesrs\LapiPayment\Exceptions</i>) podem ser lançadas ao tentar realizar um reembolso, são elas:
+| Exceção | Descrição |
+| --- | --- |
+| PaymentHasAlreadyBeenRefundedException | Pagamento já reembolsado |
+
 ### Obtendo detalhes do pagamento
 Obtendo detalhes do pagamento registrado pela gateway configurada.
 ```php
