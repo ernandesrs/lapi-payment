@@ -30,5 +30,14 @@ class LapiPaymentServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(
             __DIR__ . '/database/migrations'
         );
+
+        $this->loadTranslationsFrom(
+            __DIR__ . '/lang',
+            'lapi-payment-lang'
+        );
+
+        $this->publishes([
+            __DIR__ . '/lang' => $this->app->langPath('ernandesrs/lapi-payment')
+        ], 'lapi-payment-lang');
     }
 }
