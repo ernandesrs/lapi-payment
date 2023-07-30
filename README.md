@@ -59,6 +59,10 @@ Na raiz do seu projeto Laravel, publique o arquivo de configuração com o segui
 
 O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>.
 
+### Publique os arquivos de idiomas
+Na raiz do seu projeto Laravel, publique os arquivos de idiomas com o seguinte comando:
+> php artisan vendor:publish --tag=lapi-payment-lang
+
 ### Faça uso da trait AsCustomer no modelo User
 Na seu modelo de usuário <b><i>\App\Models\User</i></b>, faça o uso da trait <b>AsCustomer</b>, seu modelo ficará parecido com isso:
 ```php
