@@ -34,6 +34,40 @@ class Validator
     }
 
     /**
+     * Undocumented function
+     *
+     * @param float $amount
+     * @param integer $installments
+     * @return array validated data
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidDataException
+     */
+    public static function validateChargeData(float $amount, int $installments)
+    {
+        return self::validate([
+            'amount' => $amount,
+            'installments' => $installments
+        ], [
+            'amount' => ['required', 'decimal:2'],
+            'installments' => [
+                'required',
+                'integer',
+                'between:' . config('lapi-payment.allowed_min_installments') . ',' . config('lapi-payment.allowed_max_installments')
+            ]
+        ], [
+            'amount.decimal' => __('lapi-payment-lang::lapi-payment.charge.amount.decimal'),
+
+            'installments.integer' => __('lapi-payment-lang::lapi-payment.charge.installments.integer'),
+            'installments.between' => __(
+                'lapi-payment-lang::lapi-payment.charge.installments.between',
+                [
+                    'min' => config('lapi-payment.allowed_min_installments'),
+                    'max' => config('lapi-payment.allowed_max_installments')
+                ]
+            )
+        ]);
+    }
+
+    /**
      * Validate
      *
      * @param array $data

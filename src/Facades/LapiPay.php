@@ -32,6 +32,11 @@ class LapiPay extends Facade
      * @param integer $installments
      * @param array $metadata
      * @return null|\Ernandesrs\LapiPayment\Models\Payment
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidCardException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidDataException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\ChargedbackPaymentException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\RefundedPaymentException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\RefusedPaymentException
      */
     public static function chargeWithCard(\App\Models\User $user, \Ernandesrs\LapiPayment\Models\Card $card, float $amount, int $installments, array $metadata = [])
     {

@@ -80,11 +80,17 @@ class LapiPay
      * @param integer $installments
      * @param array $metadata
      * @return null|Payment
-     * @throws
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidCardException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidDataException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\ChargedbackPaymentException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\RefundedPaymentException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\RefusedPaymentException
      */
     public function chargeWithCard(\App\Models\User $user, Card $card, float $amount, int $installments, array $metadata = [])
     {
-        $transaction = $this->gatewayInstance->chargeWithCard($card, $amount, $installments, $metadata);
+        $validated = \Ernandesrs\LapiPayment\Services\Validator::validateChargeData($amount, $installments);
+
+        $transaction = $this->gatewayInstance->chargeWithCard($card, $validated['amount'], $validated['installments'], $metadata);
 
         if (in_array($transaction->status, ['refunded', 'refused', 'chargedback'])) {
             $exception = "\\Ernandesrs\\Exceptions\\" . ucfirst($transaction->status) . "PaymentException";

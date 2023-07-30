@@ -102,7 +102,7 @@ print_r($card);
 
 ```
 
-#### Erros na validação do cartão
+### Erros na validação do cartão
 Os dados do cartão passarão por uma validação prévia, antes de serem enviados para a gateway. Ao ocorrer qualquer erro na validação, uma exceção <i>\Ernandesrs\LapiPayment\Exceptions\InvalidDataException</i> será lançada e um array com as mensagens com detalhes sobre o(s) erro(s) serão armazenados na sessão do usuário(este array é um array retornado pelo validador do Laravel).
 Veja abaixo a forma para recuperar essas mensagens:
 ```php
@@ -196,6 +196,38 @@ $lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($customer)
 var_dump($lapipay);
 
 ```
+
+### Erros de validação nos dados da cobrança
+Os dados de cobrança(valor e parcela) passarão por uma validação prévia, antes de serem enviados para a gateway. Ao ocorrer qualquer erro na validação, uma exceção <i>\Ernandesrs\LapiPayment\Exceptions\InvalidDataException</i> será lançada e um array com as mensagens com detalhes sobre o(s) erro(s) serão armazenados na sessão do usuário(este array é um array retornado pelo validador do Laravel).
+Veja abaixo a forma para recuperar essas mensagens:
+```php
+
+try {
+    // try charge customer
+    $payment = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($customer)
+        ->addBilling($customer)
+        ->addProduct(2109, 'Produto Digital', 99.00, 1, false)
+        ->chargeWithCard($customer, $card, $amount, $installments);
+
+    // success
+    print_r($payment);
+} catch(\Ernandesrs\LapiPayment\Exceptions\InvalidDataException $e) {
+    // get error messages
+    $errors = \Ernandesrs\LapiPayment\Facades\LapiPay::errorMessages();
+
+    // fail
+    print_r($errors);
+}
+
+```
+
+Outras exceções(todas no namespace <i>\Ernandesrs\LapiPayment\Exceptions\</i>) podem ser lançadas ao tentar realizar uma cobrança e que podem ser capturadas, são elas:
+| Exceção | Descrição |
+| --- | --- |
+| InvalidCardException | Cartão inválido |
+| ChargedbackPaymentException | Cobrado de volta |
+| RefundedPaymentException | Pagamento devolvido |
+| RefusedPaymentException | Pagamento recusado |
 
 ### Realizando reembolsos
 Efetuando um reembolso parcial.

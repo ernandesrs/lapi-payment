@@ -10,12 +10,13 @@ class Test
         $user = \App\Models\User::where("id", 1)->first();
 
         // // validar o cartão
-        try {
-            $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, $user->customerName(), '4916626701217934', '156', '0424');
-            var_dump($card);
-        } catch (\Exception $e) {
-            var_dump(\Ernandesrs\LapiPayment\Facades\LapiPay::errorMessages());
-        }
+        // try {
+        //     $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, $user->customerName(), '4916626701217934', '156', '0424');
+        //     var_dump($card);
+        // } catch (\Exception $e) {
+        //     var_dump(\Ernandesrs\LapiPayment\Facades\LapiPay::errorMessages());
+        // }
+
         // $amount = 99.00 + 102.97 + 12.97;
         // $installments = 1;
         // $metadata = [
@@ -32,12 +33,12 @@ class Test
         // var_dump($lapipay);
 
         // $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
-        // $card = $user->cards()->first();
-        // $payment = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($user)
-        //     ->addBilling($user)
-        //     ->addProduct(8329, 'JASLKJFKSAJ', 89, 1, false)
-        //     ->chargeWithCard($user, $card, 89, 1);
-        // var_dump($payment);
+        $card = $user->cards()->first();
+        $payment = \Ernandesrs\LapiPayment\Facades\LapiPay::addCustomer($user)
+            ->addBilling($user)
+            ->addProduct(8329, 'JASLKJFKSAJ', 89.99, 1, false)
+            ->chargeWithCard($user, $card, 89.99, 1);
+        var_dump($payment);
 
         // $payment = $user->payments()->where('id', 3)->first();
 
