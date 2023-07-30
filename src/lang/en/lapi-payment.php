@@ -14,5 +14,11 @@ return [
             'integer' => 'The number of plots must be integer',
             'between' => 'The number of installments must be between :min and :max'
         ]
+    ],
+    'refund' => [
+        'amount' => [
+            'decimal' => 'Must be a valid price to 2 decimal places. Eg: 10.99',
+            'lte' => 'Value must be less than or equal to :amount'
+        ]
     ]
 ];

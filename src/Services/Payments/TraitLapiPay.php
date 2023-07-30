@@ -47,9 +47,9 @@ trait TraitLapiPay
     /**
      * Get error messages
      *
-     * @return array
+     * @return null|array
      */
-    public function errorMessages()
+    public function errorMessages(): ?array
     {
         return \Ernandesrs\LapiPayment\Services\Validator::errorMessages();
     }

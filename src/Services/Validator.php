@@ -34,7 +34,7 @@ class Validator
     }
 
     /**
-     * Undocumented function
+     * Validate charge data
      *
      * @param float $amount
      * @param integer $installments
@@ -47,7 +47,7 @@ class Validator
             'amount' => $amount,
             'installments' => $installments
         ], [
-            'amount' => ['required', 'decimal:2'],
+            'amount' => ['required', 'numeric'],
             'installments' => [
                 'required',
                 'integer',
@@ -64,6 +64,39 @@ class Validator
                     'max' => config('lapi-payment.allowed_max_installments')
                 ]
             )
+        ]);
+    }
+
+    /**
+     * Validate refund data
+     *
+     * @param float|null $amount
+     * @return array validated data
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidDataException
+     */
+    public static function validateRefundData(\Ernandesrs\LapiPayment\Models\Payment $payment, ?float $amount)
+    {
+        return self::validate([
+            'amount' => $amount
+        ], [
+            'amount' => [
+                'nullable',
+                'numeric',
+                function ($attr, $val, $fail) use ($payment) {
+                    if ($payment->amount < $val) {
+                        $fail(
+                            __(
+                                'lapi-payment-lang::lapi-payment.refund.amount.lte',
+                                [
+                                    'amount' => $payment->amount
+                                ]
+                            )
+                        );
+                    }
+                }
+            ]
+        ], [
+            'amount.decimal' => __('lapi-payment-lang::lapi-payment.refund.amount.decimal')
         ]);
     }
 
@@ -91,9 +124,9 @@ class Validator
     /**
      * Error messages
      *
-     * @return array
+     * @return null|array
      */
-    public static function errorMessages(): array
+    public static function errorMessages(): ?array
     {
         return \Session::get('lapi_payment_validation_errors');
     }

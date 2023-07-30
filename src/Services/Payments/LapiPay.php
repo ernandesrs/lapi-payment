@@ -116,6 +116,7 @@ class LapiPay
      * @param array $metadata
      * @return Payment
      * @throws \Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidDataException
      */
     public function refundPayment(Payment $payment, ?float $amount = null, array $metadata = [])
     {
@@ -123,9 +124,11 @@ class LapiPay
             throw new PaymentHasAlreadyBeenRefundedException();
         }
 
-        $refund = $this->gatewayInstance->refundPayment($payment, $amount, $metadata);
+        $validated = \Ernandesrs\LapiPayment\Services\Validator::validateRefundData($payment, $amount);
 
-        $payment->amount = $amount && $amount < $payment->amount ? ($payment->amount - $amount) : $payment->amount;
+        $refund = $this->gatewayInstance->refundPayment($payment, $validated['amount'], $metadata);
+
+        $payment->amount = $validated['amount'] && $validated['amount'] < $payment->amount ? ($payment->amount - $validated['amount']) : $payment->amount;
         $payment->status = $refund->status;
         $payment->save();
 

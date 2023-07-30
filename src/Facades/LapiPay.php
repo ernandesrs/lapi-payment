@@ -50,6 +50,8 @@ class LapiPay extends Facade
      * @param float|null $amount amount to refund. Full refund when null.
      * @param array $metadata
      * @return \Ernandesrs\LapiPayment\Models\Payment
+     * @throws \Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException
+     * @throws \Ernandesrs\LapiPayment\Exceptions\InvalidDataException
      */
     public static function refundPayment(\Ernandesrs\LapiPayment\Models\Payment $payment, ?float $amount = null, array $metadata = [])
     {
@@ -107,9 +109,9 @@ class LapiPay extends Facade
     /**
      * Get error messages
      *
-     * @return array
+     * @return null|array
      */
-    public static function errorMessages()
+    public static function errorMessages(): ?array
     {
         return (new LapiPayService())->errorMessages();
     }

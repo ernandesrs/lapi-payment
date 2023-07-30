@@ -8,11 +8,17 @@ return [
     ],
     'charge' => [
         'amount' => [
-            'decimal' => 'Deve ser um preço válido de até 2 casas decimais. Ex.: 10.99'
+            'decimal' => 'Deve ser um preço válido de até 2 casas decimais. Ex. 10.99'
         ],
         'installments' => [
             'integer' => 'O número de parcelas deve ser inteiro',
             'between' => 'O número de pacelas deve estar entre :min e :max'
+        ]
+    ],
+    'refund' => [
+        'amount' => [
+            'decimal' => 'Deve ser um preço válido de até 2 casas decimais. Ex. 10.99',
+            'lte' => 'Valor deve ser menor ou igual a :amount'
         ]
     ]
 ];
