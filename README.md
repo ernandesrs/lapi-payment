@@ -221,7 +221,7 @@ try {
 
 ```
 
-Outras exceções(todas no namespace <i>\Ernandesrs\LapiPayment\Exceptions\</i>) podem ser lançadas ao tentar realizar uma cobrança e que podem ser capturadas, são elas:
+Outras exceções(todas no namespace <i>\Ernandesrs\LapiPayment\Exceptions</i>) podem ser lançadas ao tentar realizar uma cobrança e que podem ser capturadas, são elas:
 | Exceção | Descrição |
 | --- | --- |
 | InvalidCardException | Cartão inválido |
