@@ -53,13 +53,13 @@ return [
 
 ```
 
-### (Opcional) Publique o arquivo de configuração
+### Publique o arquivo de configuração
 Na raiz do seu projeto Laravel, publique o arquivo de configuração com o seguinte comando:
 > php artisan vendor:publish --tag=lapi-payment-config
 
-O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>.
+O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>. Veja o arquivo para outras configurações.
 
-### Publique os arquivos de idiomas
+### (Opcional) Publique os arquivos de idiomas
 Na raiz do seu projeto Laravel, publique os arquivos de idiomas com o seguinte comando:
 > php artisan vendor:publish --tag=lapi-payment-lang
 
@@ -178,7 +178,7 @@ $lapipay = \Ernandesrs\LapiPayment\Facades\LapiPay::addProduct(2109, 'Produto Di
 ```
 
 ### Realizando cobrança
-Efetuando uma cobrança no cartão de crédito.
+Efetuando uma cobrança no cartão de crédito. (O valor a ser cobrado não é calculado automaticamente ao adicionar os produtos/itens)
 ```php
 
 // get customer
