@@ -145,4 +145,15 @@ class LapiPay
     {
         return $this->gatewayInstance->paymentDetails($payment->transaction_id);
     }
+
+    /**
+     * Postback
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function postback(\Illuminate\Http\Request $request)
+    {
+        return $this->gatewayInstance->postback($request);
+    }
 }

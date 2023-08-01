@@ -39,5 +39,7 @@ class LapiPaymentServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/lang' => $this->app->langPath('ernandesrs/lapi-payment')
         ], 'lapi-payment-lang');
+
+        $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
     }
 }

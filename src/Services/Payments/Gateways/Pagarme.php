@@ -7,6 +7,8 @@ use Ernandesrs\LapiPayment\Models\Payment as PaymentModel;
 
 class Pagarme
 {
+    use PagarmePostback;
+
     /**
      * Pagarme instance
      *
@@ -107,7 +109,8 @@ class Pagarme
             'installments' => $installments,
             'amount' => $amount * 100,
             'payment_method' => $method,
-            'metadata' => $metadata
+            'metadata' => $metadata,
+            'postback_url' => config('lapi-payment.postback_url_test', null) ?? route('lapi-payment.postback')
         ];
 
         $this->antifraudFields($method);

@@ -16,6 +16,7 @@ No arquivo <b>.env</b> do seu projeto, adicione as seguintes variáveis:
 ```
 
 PAYMENT_TESTING=true
+PAYMENT_POSTBACK_URL_LOCAL_TEST=
 PAYMENT_DEFAULT_GATEWAY=GATEWAY NAME
 PAYMENT_GATEWAY_PAGARME_API_TEST=YOUR API KEY TEST
 PAYMENT_GATEWAY_PAGARME_API_LIVE=YOUR API KEY LIVE
@@ -26,6 +27,7 @@ PAYMENT_GATEWAY_PAGARME_API_ANTIFRAUD=false
 | CHAVE | DESCRIÇÃO |
 | --- |  --- |
 | PAYMENT_TESTING | Define se o sistema de cobrança está em testes. Se definido como <b><i>false</i></b>, o sistema de cobrança irá efetuar cobranças reais. |
+| PAYMENT_POSTBACK_URL_LOCAL_TEST | Url de postback para teste local. |
 | PAYMENT_DEFAULT_GATEWAY | Define a gateway que será utilizada. Veja o [início da documentação as gateways implementadas](#gateways-implementados). |
 | PAYMENT_GATEWAY_PAGARME_API_TEST | Chave de teste da api(cobranças falsas para testes). |
 | PAYMENT_GATEWAY_PAGARME_API_LIVE | Chave de produção da api(cobranças reais). |
@@ -57,7 +59,7 @@ return [
 Na raiz do seu projeto Laravel, publique o arquivo de configuração com o seguinte comando:
 > php artisan vendor:publish --tag=lapi-payment-config
 
-O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>. Veja o arquivo para outras configurações.
+O arquivo de configuração possui campos que podem ser modificados no arquivo de variáveis <b>.env</b>, veja a seção acima <b>['Variáveis ambientes'](#variáveis-ambientes)</b>. [Veja o arquivo de configurações](src/config/lapi-payment.php) para mais detalhes.
 
 ### (Opcional) Publique os arquivos de idiomas
 Na raiz do seu projeto Laravel, publique os arquivos de idiomas com o seguinte comando:
