@@ -11,7 +11,7 @@ trait AsCustomer
      */
     public function cards(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Card::class, 'user_id', 'id');
+        return $this->hasMany(Card::class, 'user_id', 'id')->where('gateway', config('lapi-payment.gateway'));
     }
 
     /**
@@ -21,7 +21,7 @@ trait AsCustomer
      */
     public function payments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Payment::class, 'user_id', 'id');
+        return $this->hasMany(Payment::class, 'user_id', 'id')->where('gateway', config('lapi-payment.gateway'));
     }
 
     /**
