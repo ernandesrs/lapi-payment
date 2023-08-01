@@ -17,6 +17,10 @@ trait PagarmePostback
          */
         $postbackPayload = $request->all();
 
+        if (!$this->pagarme->postbacks()->validate($request->getContent(), $request->header('X-Hub-Signature'))) {
+            return;
+        }
+
         switch ($postbackPayload['object']) {
             case 'transaction':
                 $this->transactionPostback($postbackPayload['transaction']);
