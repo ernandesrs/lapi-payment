@@ -86,16 +86,137 @@ class User extends Authenticatable
 | MÉTODO | OBRIGATÓRIO | DESCRIÇÃO |
 | --- | --- | --- |
 | customerId() | Obrigatório | Deverá retornar o id do cliente. |
-| customerName() | Obrigatório | Deverá retornar o nome completo do cliente. |
+| customerFirstName() | Obrigatório | Deverá retornar primeiro nome do cliente. |
+| customerLastName() | Obrigatório | Deverá retornar sobrenome do cliente. |
 | customerEmail() | Obrigatório | Deverá retornar o email do cliente. |
 | customerCountry() | Obrigatório | Deverá retornar o país do cliente. |
-| customerPhoneNumbers() | Obrigatório | Deverá retornar um array simples com pelo menos um número de telefone do cliente. |
-| customerDocuments() | Obrigatório | Deverá retornar um array contendo subarrays com os documentos do cliente. Cada subarray deve possuir 2 chaves nomeadas: type e number. |
+| customerPhone() | Obrigatório | Deverá retornar uma instância de <b>[\Ernandesrs\LapiPayment\Models\Phone](src/Models/Phone.php)</b>. |
+| customerDocument() | Obrigatório | Deverá retornar uma instância de <b>[\Ernandesrs\LapiPayment\Models\Document](src/Models/Document.php)</b>. |
 | customerType() | Opcional | Tipo de cliente, <i>individual</i> ou <i>corporation</i>. O padrão é <i>individual</i>. |
 | customerAddress()() | Obrigatório | Deve retornar uma instância da classe <b>[\Ernandesrs\LapiPayment\Models\Address](src/Models/Address.php)</b>, que conterá o endereço do cliente. |
 
+Copie e cole, adaptando de acordo com seu modelo User:
+```php
+
+    /**
+     * Customer id
+     *
+     * @return string
+     */
+    public function customerId(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Customer first name
+     *
+     * @return string
+     */
+    public function customerFirstName(): string
+    {
+        return $this->first_name;
+    }
+
+    /**
+     * Customer last name
+     *
+     * @return string
+     */
+    public function customerLastName(): string
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * Customer email
+     *
+     * @return string
+     */
+    public function customerEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Customer country
+     *
+     * @return string
+     */
+    public function customerCountry(): string
+    {
+        return 'br';
+    }
+
+    /**
+     * Customer type
+     * Tipo de pessoa, individual ou corporation
+     *
+     * @return string
+     */
+    public function customerType(): string
+    {
+        return 'individual';
+    }
+
+    /**
+     * Customer phone number
+     *
+     * @return \Ernandesrs\LapiPayment\Models\Phone
+     */
+    public function customerPhone(): \Ernandesrs\LapiPayment\Models\Phone
+    {
+        return new \Ernandesrs\LapiPayment\Models\Phone(55, 67900000000);
+    }
+
+    /**
+     * Customer document
+     *
+     * @return \Ernandesrs\LapiPayment\Models\Document
+     */
+    public function customerDocument(): \Ernandesrs\LapiPayment\Models\Document
+    {
+        return \Ernandesrs\LapiPayment\Models\Document::cpf(33983219098);
+    }
+
+    /**
+     * Customer adress
+     *
+     * @return \Ernandesrs\LapiPayment\Models\Address
+     */
+    public function customerAddress(): \Ernandesrs\LapiPayment\Models\Address
+    {
+        return new \Ernandesrs\LapiPayment\Models\Address(
+            'Rua Street',
+            7822,
+            '29315-000',
+            'br',
+            'sp',
+            'São Paulo',
+            'Centro',
+            'Apartamento 489 Andar 12'
+        );
+    }
+
+```
+
 # USO
 Para fazer uso é simples, basta usar o facade <b>[\Ernandesrs\LapiPayment\Facades\LapiPay](src/Facades/LapiPay.php)</b>:
+
+## Clientes
+### Cadastrando um cliente
+Esta ação irá criar um cliente e salvá-lo na base de dados da gateway. A gateway irá retornar um ID, e este ID será armazenado no seu banco de dados como um forma associar rapidamente o cliente à uma transação(pagamento por exemplo).
+
+O exemplo abaixo cria um cliente baseado no usuário injetado(use a trait [AsCustomer](src/Models/AsCustomer.php) e implemente os métodos necessários, [veja mais aqui](#faça-uso-da-trait-ascustomer-no-modelo-user))
+```php
+
+$user = \Auth::user();
+$customer = \Ernandesrs\LapiPayment\Facades\LapiPay::createCustomer($user);
+print_r($customer);
+
+```
+
+O método <i>\Ernandesrs\LapiPayment\Facades\LapiPay::createCustomer</i> possui outros parâmetros: id, name, email, country, etc; estes parâmetros podem ser informados manualmente, mas se forem nulos, os valores serão obtidos automaticamente do $user injetado.
 
 ## Cartões
 ### Validando e salvando um cartão
@@ -105,6 +226,21 @@ O método <i>\Ernandesrs\LapiPayment\Facades\LapiPay::createCard</i> valida um c
 $user = \Auth::user();
 $card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
 print_r($card);
+
+```
+
+### Recuperandos cliente
+Recupere os dados do cliente salvos na base de dados da gateway
+```php
+
+// first way
+$details = $user->customer()->first()->details();
+var_dump($details);
+
+// second way
+$customer = $user->customer()->first();
+$details = \Ernandesrs\LapiPayment\Facades\LapiPay::customerDetails($customer);
+var_dump($details);
 
 ```
 

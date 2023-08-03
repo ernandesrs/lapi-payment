@@ -56,6 +56,47 @@ class Pagarme
     }
 
     /**
+     * Create customer
+     *
+     * @param string $id
+     * @param string $name
+     * @param string $email
+     * @param string $country
+     * @param \Ernandesrs\LapiPayment\Models\Phone $phone
+     * @param \Ernandesrs\LapiPayment\Models\Document $document
+     * @param string $type individual/corporation
+     * @return null|\ArrayObject
+     */
+    public function createCustomer(
+        string $id,
+        string $name,
+        string $email,
+        string $country,
+        \Ernandesrs\LapiPayment\Models\Phone $phone,
+        \Ernandesrs\LapiPayment\Models\Document $document,
+        string $type = 'individual'
+    ) {
+        $customer = $this->pagarme->customers()->create([
+            'external_id' => $id,
+            'name' => $name,
+            'type' => $type,
+            'country' => $country,
+            'email' => $email,
+            'documents' => [
+                [
+                    'type' => $document->type,
+                    'number' => $document->number . ''
+                ]
+            ],
+            'phone_numbers' => [
+                $phone->full()
+            ],
+        ]);
+
+        return $customer->id ?? null ? $customer : null;
+    }
+
+    /**
      * Validate and create a card
      *
      * @param string $holderName
@@ -153,6 +194,21 @@ class Pagarme
         ]);
 
         return $transaction->id ?? null ? $transaction : null;
+    }
+
+    /**
+     * Customer details
+     *
+     * @param string $customerId
+     * @return null|\ArrayObject
+     */
+    public function customerDetails(string $customerId)
+    {
+        $customer = $this->pagarme->customers()->get([
+            'id' => $customerId
+        ]);
+
+        return $customer->id ?? null ? $customer : null;
     }
 
     /**

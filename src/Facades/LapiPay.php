@@ -8,6 +8,32 @@ use Ernandesrs\LapiPayment\Services\Payments\LapiPay as LapiPayService;
 class LapiPay extends Facade
 {
     /**
+     * Create customer
+     *
+     * @param \App\Models\User $user
+     * @param ?string $id
+     * @param ?string $name
+     * @param ?string $email
+     * @param ?string $country
+     * @param ?\Ernandesrs\LapiPayment\Models\Phone $phone
+     * @param ?\Ernandesrs\LapiPayment\Models\Document $document
+     * @param ?string $type individual/corporation
+     * @return null|\Ernandesrs\LapiPayment\Models\UserIsCustomer
+     */
+    public static function createCustomer(
+        \App\Models\User $user,
+        ?string $id = null,
+        ?string $name = null,
+        ?string $email = null,
+        ?string $country = null,
+        ?\Ernandesrs\LapiPayment\Models\Phone $phone = null,
+        ?\Ernandesrs\LapiPayment\Models\Document $document = null,
+        ?string $type = null
+    ) {
+        return (new LapiPayService())->createCustomer($user, $id, $name, $email, $country, $phone, $document, $type);
+    }
+
+    /**
      * Validate and save a card
      *
      * @param \App\Models\User $user
@@ -67,6 +93,17 @@ class LapiPay extends Facade
     public static function paymentDetails(\Ernandesrs\LapiPayment\Models\Payment $payment)
     {
         return (new LapiPayService())->paymentDetails($payment);
+    }
+
+    /**
+     * Get customer details registered by configured gateway
+     *
+     * @param \Ernandesrs\LapiPayment\Models\UserIsCustomer $customer
+     * @return null|\ArrayObject
+     */
+    public static function customerDetails(\Ernandesrs\LapiPayment\Models\UserIsCustomer $customer)
+    {
+        return (new LapiPayService())->customerDetails($customer);
     }
 
     /**

@@ -5,6 +5,26 @@ namespace Ernandesrs\LapiPayment\Models;
 trait AsCustomer
 {
     /**
+     * Get all of the customer for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function customer(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UserIsCustomer::class, 'user_id', 'id')->where('gateway', config('lapi-payment.gateway'));
+    }
+
+    /**
+     * Check if this user is a customer
+     *
+     * @return boolean
+     */
+    public function isCustomer(): bool
+    {
+        return $this->customer()->count();
+    }
+
+    /**
      * Get all of the cards for the User
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -32,11 +52,28 @@ trait AsCustomer
     abstract public function customerId(): string;
 
     /**
+     * Customer first name
+     *
+     * @return string
+     */
+    abstract public function customerFirstName(): string;
+
+    /**
+     * Customer last name
+     *
+     * @return string
+     */
+    abstract public function customerLastName(): string;
+
+    /**
      * Customer full name
      *
      * @return string
      */
-    abstract public function customerName(): string;
+    public function customerName(): string
+    {
+        return $this->customerFirstName() . ' ' . $this->customerLastName();
+    }
 
     /**
      * Customer email
@@ -64,18 +101,18 @@ trait AsCustomer
     }
 
     /**
-     * Customer phone numbers
+     * Customer phone number
      *
-     * @return array
+     * @return \Ernandesrs\LapiPayment\Models\Phone
      */
-    abstract public function customerPhoneNumbers(): array;
+    abstract public function customerPhone(): \Ernandesrs\LapiPayment\Models\Phone;
 
     /**
-     * Customer documents
+     * Customer document
      *
-     * @return array
+     * @return \Ernandesrs\LapiPayment\Models\Document
      */
-    abstract public function customerDocuments(): array;
+    abstract public function customerDocument(): \Ernandesrs\LapiPayment\Models\Document;
 
     /**
      * Customer adress

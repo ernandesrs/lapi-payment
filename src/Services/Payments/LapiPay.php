@@ -6,6 +6,7 @@ use Ernandesrs\LapiPayment\Exceptions\InvalidCardException;
 use Ernandesrs\LapiPayment\Exceptions\PaymentHasAlreadyBeenRefundedException;
 use Ernandesrs\LapiPayment\Models\Card;
 use Ernandesrs\LapiPayment\Models\Payment;
+use Ernandesrs\LapiPayment\Models\UserIsCustomer;
 
 class LapiPay
 {
@@ -35,6 +36,48 @@ class LapiPay
     public function __construct(?string $gateway = null)
     {
         $this->gateway($gateway ?? config('lapi-payment.gateway'));
+    }
+
+    /**
+     * Create customer
+     *
+     * @param \App\Models\User $user
+     * @param ?string $id
+     * @param ?string $name
+     * @param ?string $email
+     * @param ?string $country
+     * @param ?\Ernandesrs\LapiPayment\Models\Phone $phone
+     * @param ?\Ernandesrs\LapiPayment\Models\Document $document
+     * @param ?string $type individual/corporation
+     * @return null|\Ernandesrs\LapiPayment\Models\UserIsCustomer
+     */
+    public function createCustomer(
+        \App\Models\User $user,
+        ?string $id = null,
+        ?string $name = null,
+        ?string $email = null,
+        ?string $country = null,
+        ?\Ernandesrs\LapiPayment\Models\Phone $phone = null,
+        ?\Ernandesrs\LapiPayment\Models\Document $document = null,
+        ?string $type = null
+    ) {
+        if ($user->isCustomer()) {
+            return $user->customer()->first();
+        }
+
+        $customer = $this->gatewayInstance->createCustomer(
+            $id ?? $user->customerId(),
+            $name ?? $user->customerName(),
+            $email ?? $user->customerEmail(),
+            $country ?? $user->customerCountry(),
+            $phone ?? $user->customerPhone(),
+            $document ?? $user->customerDocument(),
+            $type ?? $user->customerType()
+        );
+        return !$customer ? throw new \Ernandesrs\LapiPayment\Exceptions\InvalidDataException() : $user->customer()->create([
+            'gateway' => config('lapi-payment.gateway'),
+            'customer_id' => $customer->id
+        ]);
     }
 
     /**
@@ -144,6 +187,17 @@ class LapiPay
     public function paymentDetails(Payment $payment)
     {
         return $this->gatewayInstance->paymentDetails($payment->transaction_id);
+    }
+
+    /**
+     * Get customer details registered by gateway
+     *
+     * @param UserIsCustomer $payment
+     * @return null|\ArrayObject
+     */
+    public function customerDetails(UserIsCustomer $customer)
+    {
+        return $this->gatewayInstance->customerDetails($customer->customer_id);
     }
 
     /**
