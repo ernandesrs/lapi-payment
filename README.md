@@ -218,17 +218,6 @@ print_r($customer);
 
 O método <i>\Ernandesrs\LapiPayment\Facades\LapiPay::createCustomer</i> possui outros parâmetros: id, name, email, country, etc; estes parâmetros podem ser informados manualmente, mas se forem nulos, os valores serão obtidos automaticamente do $user injetado.
 
-## Cartões
-### Validando e salvando um cartão
-O método <i>\Ernandesrs\LapiPayment\Facades\LapiPay::createCard</i> valida um cartão com a gateway e o salva no banco de dados. O cartão pertencerá ao usuário injetado.
-```php
-
-$user = \Auth::user();
-$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
-print_r($card);
-
-```
-
 ### Recuperandos cliente
 Recupere os dados do cliente salvos na base de dados da gateway
 ```php
@@ -241,6 +230,17 @@ var_dump($details);
 $customer = $user->customer()->first();
 $details = \Ernandesrs\LapiPayment\Facades\LapiPay::customerDetails($customer);
 var_dump($details);
+
+```
+
+## Cartões
+### Validando e salvando um cartão
+O método <i>\Ernandesrs\LapiPayment\Facades\LapiPay::createCard</i> valida um cartão com a gateway e o salva no banco de dados. O cartão pertencerá ao usuário injetado.
+```php
+
+$user = \Auth::user();
+$card = \Ernandesrs\LapiPayment\Facades\LapiPay::createCard($user, 'The Holder Name', '4916626701217934', '156', '0424');
+print_r($card);
 
 ```
 
